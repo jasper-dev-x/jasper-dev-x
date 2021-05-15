@@ -1,0 +1,5 @@
+{
+    // "@babel/preset-env" turns ES6 into Javascript (most modern browsers don't need this)
+    // "@babel/preset-react" deals with JSX
+    "presets": ["@babel/preset-env", "@babel/preset-react"]
+}
