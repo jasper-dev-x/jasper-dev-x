@@ -5,7 +5,7 @@ export default function Home({ mode }) {
 
     return (
         <div className="d-flex flex-fill centerFlex">
-            <h1 className={ `display-1 txtJasper text-${textMode()}` }>Jasper.Dev.x</h1>
+            <h1 className={ `display-1 txtJasper txtRed` }>Welcome</h1>
         </div>
     );
 }
