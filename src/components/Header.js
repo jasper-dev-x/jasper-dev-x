@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
 import { Link } from 'react-router-dom';
 import SPADE from '../images/jasperSpade.png';
@@ -7,7 +6,7 @@ export default function Header({ mode, setMode = x => x }) {
     const XY = 30;
     const changeMode = () => { mode === 'light' ? setMode('dark') : setMode('light'); };
     const contrast = () => { return mode === 'light' ? 'dark' : 'light'; };
-    const links = ['Just', 'Some', 'Links', 'For This', 'Demo'];
+    const links = ['accounts', 'inventory', 'menu'];
 
     return (
         <div className={ `d-flex fixed-top centerFlex bg-${mode} shadow` } style={ { height: window.innerHeight * .12 } }>
@@ -38,15 +37,17 @@ export default function Header({ mode, setMode = x => x }) {
                     </button>
                     <div id="offcanvasNav" className="offcanvas offcanvas-end d-flex" tabIndex="-1">
                         <div className="offcanvas-header centerFlex bgRed rounded">
-                            <h1 className="display-5 txtJasper text-light">Jasper.Dev.X</h1>
-                            <button type="button" className="btn-close text-reset me-2" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                            <h1 className="display-5 txtJasper">Jasper.Dev.X</h1>
+                            <button type="button" className="btn-close text-reset me-1" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                         </div>
                         <div className={ `offcanvas-body d-flex bg-${mode}` }>
                             <div className="d-flex flex-column flex-fill justify-content-around align-items-center">
                                 { links.map((item, key) => (
                                     <div key={ key }>
-                                        <Link>
-                                            <div className={ `btn btn-outline-${contrast()} border-0 txtJasper` }>{ item }</div>
+                                        <Link to={ `/${item}` }>
+                                            <div className={ `btn btn-outline-${contrast()} border-0` } data-bs-dismiss="offcanvas">
+                                                <span className="txtJasper display-6">{ item.slice(0, 1).toUpperCase() + item.slice(1) }</span>
+                                            </div>
                                         </Link>
                                     </div>
                                 )) }

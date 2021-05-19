@@ -18,6 +18,7 @@
 
 .bgRed {
  background-color: #9A182B;
+ color: whitesmoke;
 }
 
 .centerFlex {
@@ -28,4 +29,13 @@
 #offcanvasNav {
   background-color: rgba(0,0,0,0);
   border: 0;
+}
+
+.input-group-text {
+  background-color: #9A182B;
+  color: whitesmoke;
+}
+
+.form-control:focus {
+  color: #9A182B
 }

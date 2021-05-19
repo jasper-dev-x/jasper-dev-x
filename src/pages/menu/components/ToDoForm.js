@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { createTodo } from './actions';
+import { createTodo } from '../actions';
 
 const mapStateToProps = state => ({
     todos: state.todos
@@ -13,7 +13,7 @@ export function ToDoForm({ todos, onCreateTodo }) {
     const [inputToDo, setInputToDo] = useState('');
     return (
         <div className="d-flex">
-            <input type="text" className="form-control" value={ inputToDo } onChange={ (x) => setInputToDo(x.target.value) } />
+            <input type="text" className="form-control me-2" value={ inputToDo } onChange={ (x) => setInputToDo(x.target.value) } />
             <button className="btn btn-primary" onClick={ () => {
                 const isDuplicateText =
                     todos.some((todo) => todo.text === inputToDo);
