@@ -1,14 +1,15 @@
 import { CREATE_ITEM, DELETE_ITEM } from './actions';
 
-export const Inventory = (state = [], action) => {
+export const inventory = (state = [], action) => {
     const { type, payload } = action;
 
     switch (type) {
         case CREATE_ITEM: {
-            const { name, price } = payload;
+            const { name, price, quantity } = payload;
             const newItem = {
                 name,
-                price
+                price,
+                quantity
             };
             return state.concat(newItem);
         }

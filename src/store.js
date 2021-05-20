@@ -5,10 +5,12 @@ import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import thunk from 'redux-thunk';
 import { todos } from './pages/menu/reducers';
 import { accounts } from './pages/accounts/reducers';
+import { inventory } from './pages/inventory/reducers';
 
 const reducers = {
     todos,
-    accounts
+    accounts,
+    inventory
 };
 
 const persistConfig = {

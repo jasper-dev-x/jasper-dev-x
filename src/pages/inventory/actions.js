@@ -5,8 +5,7 @@ export const createItem = (item) => ({
     payload: {
         name: item.name,
         price: item.price,
-        quantity: item.quantity,
-        tags: item.tags
+        quantity: item.quantity
     }
 });
 

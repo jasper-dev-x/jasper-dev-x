@@ -13,12 +13,12 @@ const mapDispatchToProps = dispatch => ({
 export function AccountList({ accounts = [], onDeleteAccount = x => x }) {
 
     return (
-        <div>
+        <div className="d-flex flex-column">
             <h1 className="text-center txtJasper">Account List</h1>
-            <ul className="list-group shadow">
+            <ul className="list-group">
                 { accounts.map((item, key) => (
-                    <li key={ key } className="list-group-item container">
-                        <div className="row px-3">
+                    <li key={ key } className="list-group-item shadow">
+                        <div className="d-flex">
                             <div className="col">
                                 <span>Name: { item.name }</span>
                             </div>

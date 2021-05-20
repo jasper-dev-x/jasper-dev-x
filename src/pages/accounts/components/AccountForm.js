@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { createAccount } from '../actions';
 
@@ -6,7 +6,9 @@ const mapDispatchToProps = dispatch => ({
     onCreateAccount: (account) => dispatch(createAccount(account)),
 });
 
-export function AccountForm({ name, setName = x => x, phone, setPhone = x => x, onCreateAccount = x => x }) {
+export function AccountForm({ onCreateAccount = x => x }) {
+    const [name, setName] = useState('');
+    const [phone, setPhone] = useState('');
 
     return (
         <div className="row">
