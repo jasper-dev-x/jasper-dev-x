@@ -1,4 +1,4 @@
-import { CREATE_ITEM, DELETE_ITEM } from './actions';
+import { CREATE_ITEM, DELETE_ITEM, UPDATE_ITEM } from './actions';
 
 export const inventory = (state = [], action) => {
     const { type, payload } = action;
@@ -16,6 +16,15 @@ export const inventory = (state = [], action) => {
         case DELETE_ITEM: {
             const { name } = payload;
             return state.filter((item) => item.name !== name);
+        }
+        case UPDATE_ITEM: {
+            const { name, price, quantity } = payload;
+            const updatedItem = {
+                name,
+                price,
+                quantity
+            };
+            return state.filter((item) => item.name !== name).concat(updatedItem);
         }
         default:
             return state;

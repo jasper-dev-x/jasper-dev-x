@@ -16,26 +16,26 @@ function App() {
   }, [mode]);
 
   return (
-    <div className={ `bg-${mode}` } style={ { height: window.innerHeight } }>
+    <div className={ `bg-danger` } style={ { height: window.innerHeight } }>
       <BrowserRouter>
-        <div className={ `d-flex flex-fill flex-column align-items-center bg-${mode}` }>
+        <div className={ `d-flex flex-fill flex-column bg-${mode}` }>
           {/* HEADER 12% HEIGHT */ }
           <Header mode={ mode } setMode={ setMode } />
 
           {/* BODY 88% HEIGHT */ }
-          <div id="appBody" className={ `d-flex bg-${mode}` } style={ { height: window.innerHeight * .88, marginTop: window.innerHeight * .12, width: window.innerWidth } }>
+          <div id="appBody" className={ `d-flex flex-fill bg-${mode}` } style={ { minHeight: `88vh`, marginTop: `12vh` } }>
             <Switch>
               <Route path="/" exact>
                 <Home mode={ mode } />
               </Route>
               <Route path="/accounts">
-                <AccountPage />
+                <AccountPage mode={ mode } />
               </Route>
               <Route path="/inventory">
-                <InventoryPage />
+                <InventoryPage mode={ mode } />
               </Route>
               <Route path="/menu">
-                <Menu />
+                <Menu mode={ mode } />
               </Route>
               <Route>
                 <NotFound />
@@ -43,7 +43,6 @@ function App() {
             </Switch>
           </div>
         </div>
-
       </BrowserRouter>
     </div>
   );

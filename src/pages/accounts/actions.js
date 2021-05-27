@@ -4,6 +4,7 @@ export const createAccount = (account) => ({
     type: CREATE_ACCOUNT,
     payload: {
         name: account.name,
+        email: account.email,
         phone: account.phone
     }
 });
@@ -17,3 +18,13 @@ export const deleteAccount = (phone) => ({
     }
 });
 
+// ----- UPDATE ----- //
+export const UPDATE_ACCOUNT = 'UPDATE_ACCOUNT';
+export const updateAccount = (account) => ({
+    type: UPDATE_ACCOUNT,
+    payload: {
+        name: account.name,
+        email: account.email,
+        phone: account.phone
+    }
+});
