@@ -1,4 +1,25 @@
-import { CREATE_ACCOUNT, DELETE_ACCOUNT, UPDATE_ACCOUNT } from './actions';
+import {
+    CREATE_ACCOUNT,
+    DELETE_ACCOUNT,
+    UPDATE_ACCOUNT,
+    LOAD_ACCOUNTS_IN_PROGRESS,
+    LOAD_ACCOUNTS_SUCCESS,
+    LOAD_ACCOUNTS_FAILURE
+} from './actions';
+
+export const accountsAreLoading = (state = false, action) => {
+    const { type } = action;
+
+    switch (type) {
+        case LOAD_ACCOUNTS_IN_PROGRESS:
+            return true;
+        case LOAD_ACCOUNTS_SUCCESS:
+        case LOAD_ACCOUNTS_FAILURE:
+            return false;
+        default:
+            return state;
+    }
+};
 
 export const accounts = (state = [], action) => {
     const { type, payload } = action;
@@ -9,23 +30,32 @@ export const accounts = (state = [], action) => {
             const newAccount = {
                 name,
                 email,
-                phone
+                phone: { $numberLong: phone }
             };
             return state.concat(newAccount);
         }
         case DELETE_ACCOUNT: {
-            const { phone } = payload;
-            return state.filter((account) => account.phone !== phone);
+            const { id } = payload;
+            return state.filter((account) => account._id.$oid !== id);
         }
         case UPDATE_ACCOUNT: {
-            const { name, email, phone } = payload;
+            const { _id, name, email, phone } = payload;
             const updatedAccount = {
+                _id,
                 name,
                 email,
-                phone
+                phone: { $numberLong: phone }
             };
-            return state.filter((account) => account.phone !== phone).concat(updatedAccount);
+            return state.filter((account) => account._id.$oid !== _id.$oid).concat(updatedAccount);
         }
+        case LOAD_ACCOUNTS_SUCCESS: {
+            const { accounts } = payload;
+            return accounts ? accounts : state;
+        }
+        case LOAD_ACCOUNTS_IN_PROGRESS:
+            return state;
+        case LOAD_ACCOUNTS_FAILURE:
+            return state;
         default:
             return state;
     }

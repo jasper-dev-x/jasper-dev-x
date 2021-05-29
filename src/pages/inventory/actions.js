@@ -11,10 +11,10 @@ export const createItem = (item) => ({
 
 // ----- DELETE ----- //
 export const DELETE_ITEM = 'DELETE_ITEM';
-export const deleteItem = (name) => ({
+export const deleteItem = (id) => ({
     type: DELETE_ITEM,
     payload: {
-        name
+        id
     }
 });
 
@@ -27,4 +27,23 @@ export const updateItem = (item) => ({
         price: item.price,
         quantity: item.quantity
     }
+});
+
+// LOAD IN PROGRESS
+export const LOAD_INVENTORY_IN_PROGRESS = "LOAD_INVENTORY_IN_PROGRESS";
+export const loadInventoryInProgress = () => ({
+    type: LOAD_INVENTORY_IN_PROGRESS,
+});
+
+// LOAD SUCCESS
+export const LOAD_INVENTORY_SUCCESS = "LOAD_INVENTORY_SUCCESS";
+export const loadInventorySuccess = (inventory) => ({
+    type: LOAD_INVENTORY_SUCCESS,
+    payload: { inventory }
+});
+
+// LOAD FAILURE
+export const LOAD_INVENTORY_FAILURE = "LOAD_INVENTORY_FAILURE";
+export const loadInventoryFailure = () => ({
+    type: LOAD_INVENTORY_FAILURE,
 });

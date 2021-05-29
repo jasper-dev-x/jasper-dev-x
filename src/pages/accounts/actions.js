@@ -11,10 +11,10 @@ export const createAccount = (account) => ({
 
 // ----- DELETE ----- //
 export const DELETE_ACCOUNT = 'DELETE_ACCOUNT';
-export const deleteAccount = (phone) => ({
+export const deleteAccount = (id) => ({
     type: DELETE_ACCOUNT,
     payload: {
-        phone
+        id
     }
 });
 
@@ -23,8 +23,29 @@ export const UPDATE_ACCOUNT = 'UPDATE_ACCOUNT';
 export const updateAccount = (account) => ({
     type: UPDATE_ACCOUNT,
     payload: {
+        _id: account._id,
         name: account.name,
         email: account.email,
         phone: account.phone
     }
 });
+
+// LOAD IN PROGRESS
+export const LOAD_ACCOUNTS_IN_PROGRESS = 'LOAD_ACCOUNTS_IN_PROGRESS';
+export const loadAccountsInProgress = () => ({
+    type: LOAD_ACCOUNTS_IN_PROGRESS
+});
+
+// LOAD SUCCESS
+export const LOAD_ACCOUNTS_SUCCESS = 'LOAD_ACCOUNTS_SUCCESS';
+export const loadAccountsSuccess = (accounts) => ({
+    type: LOAD_ACCOUNTS_SUCCESS,
+    payload: { accounts }
+});
+
+// LOAD FAILURE
+export const LOAD_ACCOUNTS_FAILURE = 'LOAD_ACCOUNTS_FAILURE';
+export const loadAccountsFailure = () => ({
+    type: LOAD_ACCOUNTS_FAILURE
+});
+

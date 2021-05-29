@@ -4,9 +4,9 @@ import AccountForm from './components/AccountForm';
 import AccountList from './components/AccountList';
 
 export function Accounts({ mode }) {
-
+    const contrast = () => mode === 'light' ? 'dark' : 'light';
     return (
-        <div className="d-flex flex-fill bgRed" >
+        <div className={ `d-flex flex-fill text-${contrast()}` } >
             <div className="d-flex flex-column container">
                 <div className="d-flex row flex-grow-1">
                     <AccountList mode={ mode } />

@@ -1,31 +1,41 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { deleteItem, updateItem } from '../actions';
+import { loadInventory, deleteItem as deleteDBItem } from '../thunks';
 
 const mapStateToProps = state => ({
     inventory: state.inventory
 });
 
 const mapDispatchToProps = dispatch => ({
-    onDeleteItem: (name) => dispatch(deleteItem(name)),
-    onUpdateItem: (item) => dispatch(updateItem(item))
+    onSeshDeleteItem: (id) => dispatch(deleteItem(id)),
+    onDBDeleteItem: (id) => dispatch(deleteDBItem(id)),
+    onUpdateItem: (item) => dispatch(updateItem(item)),
+    startLoadingInventory: () => dispatch(loadInventory())
 });
 
-export function InventoryList({ inventory = [], onDeleteItem = x => x, onUpdateItem = x => x, mode }) {
+export function InventoryList({ mode, inventory = [], onSeshDeleteItem, onDBDeleteItem, onUpdateItem, startLoadingInventory }) {
+    const [oid, setOid] = useState('');
     const [name, setName] = useState('');
     const [price, setPrice] = useState('');
     const [quantity, setQuantity] = useState('');
 
+    useEffect(() => {
+        startLoadingInventory();
+    }, [startLoadingInventory]);
+
     function setEditForm(item) {
+        setOid(item._id.$oid);
         setName(item.name);
-        setPrice(item.price);
-        setQuantity(item.quantity);
+        setPrice(item.price.$numberInt);
+        setQuantity(item.quantity.$numberInt);
     }
+
     const contrast = () => { return mode === 'light' ? 'dark' : 'light'; };
 
     return (
         <div style={ { height: `88vh` } }>
-            <h1 className={ `txtJasper display-4 text-${contrast()} py-3` }>Inventory List</h1>
+            <h1 className={ `txtJasper display-4 py-3` }>Inventory List</h1>
             <div className="shadow">
 
                 <table className="table text-center lead user-select-none">
@@ -45,48 +55,59 @@ export function InventoryList({ inventory = [], onDeleteItem = x => x, onUpdateI
                                 <tr key={ key } onClick={ () => setEditForm(item) } data-bs-toggle="modal" data-bs-target="#editPopup" className={ `table-${mode}` }>
                                     <td className="col-1 py-2">{ key + 1 }</td>
                                     <td className="col py-2">{ item.name }</td>
-                                    <td className="col-3 py-2">${ item.price }.00</td>
-                                    <td className="col-2 py-2">x{ item.quantity }</td>
+                                    <td className="col-3 py-2">${ item.price.$numberInt }.00</td>
+                                    <td className="col-2 py-2">x{ item.quantity.$numberInt }</td>
                                 </tr>
                             )) }
                         </tbody>
                     </table>
                     <div className="modal fade" id="editPopup" tabIndex="-1">
                         <div className="modal-dialog modal-dialog-centered">
-                            <div className={ `modal-content bg-${mode} text-${contrast()}` }>
+                            <div className={ `modal-content bg-${mode}` }>
                                 <div className="modal-header lead">
                                     <span>{ name }</span>
-                                    <span className="btn btn-sm btn-close" data-bs-dismiss="modal" />
+                                    <span className="btn btn-sm btn-close bg-light" data-bs-dismiss="modal" />
                                 </div>
                                 <div className="modal-body">
                                     <div className="my-5">
                                         <div className="col">
                                             <div className="input-group mb-3">
+                                                <span className="input-group-text">ID</span>
+                                                <input type="text" className="form-control" value={ oid } disabled />
+                                            </div>
+                                        </div>
+                                        <div className="col">
+                                            <div className="input-group mb-3">
                                                 <span className="input-group-text">Name</span>
-                                                <input type="text" className="form-control" value={ name } onChange={ (x) => setName(x.target.value) } disabled />
+                                                <input type="text" className="form-control" value={ name } onChange={ (x) => setName(x.target.value) } />
                                             </div>
                                         </div>
                                         <div className="col">
                                             <div className="input-group mb-3">
                                                 <span className="input-group-text">Price</span>
-                                                <span className={ `input-group-text bg-${mode} text-${contrast()}` }>$</span>
+                                                <span className={ `input-group-text bg-${mode}` }>$</span>
                                                 <input type="number" className="form-control" value={ price } onChange={ (x) => setPrice(x.target.value) } />
-                                                <span className={ `input-group-text bg-${mode} text-${contrast()}` }>.00</span>
+                                                <span className={ `input-group-text bg-${mode}` }>.00</span>
                                             </div>
                                         </div>
                                         <div className="col">
                                             <div className="input-group mb-3">
-                                                <span className="input-group-text">Qty</span>
-                                                {/* <button className="btn btn-outline-success rounded" onClick={ () => setQuantity(quantity + 1) }>+</button> */ }
+                                                <span className="input-group-text rounded me-2">Qty</span>
+                                                <button className="btn btn-outline-success rounded" onClick={ () => setQuantity(parseInt(quantity) + 1) }>+</button>
                                                 <input type="number" className="form-control" value={ quantity } onChange={ (x) => setQuantity(x.target.value) } />
-                                                {/* <button className="btn btn-outline-danger rounded" onClick={ () => setQuantity(quantity <= 0 ? 0 : quantity - 1) }>-</button> */ }
+                                                <button className="btn btn-outline-danger rounded" onClick={ () => setQuantity(quantity <= 0 ? 0 : parseInt(quantity) - 1) }>-</button>
                                             </div>
                                         </div>
                                     </div>
                                     <div className="row">
                                         <div className="d-grid flex-c">
-                                            <button className={ `btn btn-${contrast()} mb-3` } data-bs-dismiss="modal" onClick={ () => onUpdateItem({ name, price, quantity }) }>Update</button>
-                                            <button className="btn btn-danger" data-bs-dismiss="modal" onClick={ () => onDeleteItem(name) }>Delete Item</button>
+                                            <button className={ `btn btn-${contrast()} mb-3` } data-bs-dismiss="modal" onClick={ () => onUpdateItem({ name, price, quantity }) } disabled>Save</button>
+                                            <button className="btn btn-danger" data-bs-dismiss="modal" onClick={ () => {
+                                                onSeshDeleteItem(oid);
+                                                onDBDeleteItem(oid);
+                                            } }>
+                                                Delete
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -95,7 +116,7 @@ export function InventoryList({ inventory = [], onDeleteItem = x => x, onUpdateI
                     </div>
                 </div>
             </div>
-        </div >
+        </div>
     );
 }
 

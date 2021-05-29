@@ -45,3 +45,7 @@
   border: 0;
   justify-content: space-around;
 }
+
+.form-control-lg {
+  text-align: center;
+}

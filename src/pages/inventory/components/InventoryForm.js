@@ -1,28 +1,35 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { createItem } from '../actions';
+import { createItem as createSeshItem } from '../actions';
+import { createItem as createDBItem } from '../thunks';
 
 const mapDispatchToProps = dispatch => ({
-    onCreateItem: (item) => dispatch(createItem(item))
+    onCreateSeshItem: (item) => dispatch(createSeshItem(item)),
+    onCreateDBItem: (item) => dispatch(createDBItem(item))
 });
 
-export function InventoryForm({ onCreateItem = x => x, mode }) {
+export function InventoryForm({ mode, onCreateDBItem, onCreateSeshItem }) {
     const [name, setName] = useState('');
     const [price, setPrice] = useState('');
     const [quantity, setQuantity] = useState('');
 
     function addItem(item) {
-        onCreateItem(item);
-        setName('');
-        setPrice(0);
-        setQuantity(0);
-        window.scrollTo(0, 0);
+        try {
+            onCreateDBItem(item);
+            onCreateSeshItem(item);
+            setName('');
+            setPrice(0);
+            setQuantity(0);
+            window.scrollTo(0, 0);
+        } catch (err) {
+            console.error("ERROR ADD ITEM InventoryForm.js: ", err);
+        }
     }
     const contrast = () => { return mode === 'light' ? 'dark' : 'light'; };
 
     return (
         <div className="container" style={ { height: `88vh` } }>
-            <h1 className={ `txtJasper display-4 text-${contrast()} py-3` }>Inventory Form</h1>
+            <h1 className={ `txtJasper display-4 py-3` }>Inventory Form</h1>
             <div className="input-group mb-3">
                 <span className="input-group-text bgRed">Name</span>
                 <input type="text" className="form-control" value={ name } onChange={ (x) => setName(x.target.value) } />
@@ -38,9 +45,7 @@ export function InventoryForm({ onCreateItem = x => x, mode }) {
             <div className="col">
                 <div className="input-group mb-3">
                     <span className="input-group-text">Qty</span>
-                    {/* <button className="btn btn-outline-success rounded" onClick={ () => setQuantity(quantity + 1) }>+</button> */ }
                     <input type="number" className="form-control" value={ quantity } onChange={ (x) => setQuantity(x.target.value) } />
-                    {/* <button className="btn btn-outline-danger rounded" onClick={ () => setQuantity(quantity <= 0 ? 0 : quantity - 1) }>-</button> */ }
                 </div>
             </div>
 
