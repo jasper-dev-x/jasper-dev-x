@@ -73,7 +73,7 @@ export function InventoryList({ mode, inventory = [], onSeshDeleteItem, onDBDele
                                         <div className="col">
                                             <div className="input-group mb-3">
                                                 <span className="input-group-text">ID</span>
-                                                <input type="text" className="form-control" value={ oid } disabled />
+                                                <span type="text" className="input-group-text bg-secondary user-select-none">{ oid }</span>
                                             </div>
                                         </div>
                                         <div className="col">
@@ -85,9 +85,9 @@ export function InventoryList({ mode, inventory = [], onSeshDeleteItem, onDBDele
                                         <div className="col">
                                             <div className="input-group mb-3">
                                                 <span className="input-group-text">Price</span>
-                                                <span className={ `input-group-text bg-${mode}` }>$</span>
+                                                <span className={ `input-group-text bg-${mode} text-${contrast()}` }>$</span>
                                                 <input type="number" className="form-control" value={ price } onChange={ (x) => setPrice(x.target.value) } />
-                                                <span className={ `input-group-text bg-${mode}` }>.00</span>
+                                                <span className={ `input-group-text bg-${mode} text-${contrast()}` }>.00</span>
                                             </div>
                                         </div>
                                         <div className="col">

@@ -35,6 +35,7 @@
 .input-group-text {
   background-color: #9A182B;
   color: whitesmoke;
+  user-select: none;
 }
 
 .form-control:focus {
@@ -45,7 +46,6 @@
   border: 0;
   justify-content: space-around;
 }
-
 .form-control-lg {
   text-align: center;
 }

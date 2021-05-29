@@ -15,7 +15,7 @@ const mapDispatchToProps = dispatch => ({
     startLoadingAccounts: () => dispatch(loadAccounts())
 });
 
-export function AccountList({ mode, accounts = [], isLoading = false, onDeleteSeshAccount, onDeleteDBAccount, onUpdateAccount, startLoadingAccounts }) {
+export function AccountList({ mode, accounts = [], isLoading, onDeleteSeshAccount, onDeleteDBAccount, onUpdateAccount, startLoadingAccounts }) {
     // eslint-disable-next-line
     const [name, setName] = useState('');
     // eslint-disable-next-line
@@ -43,59 +43,65 @@ export function AccountList({ mode, accounts = [], isLoading = false, onDeleteSe
         }
     }
 
-    // if (isLoading)
-    //     return <div>Loading...</div>;
-    // else
-    return (
-        <div style={ { height: `88vh` } }>
-            <h1 className="text-center txtJasper display-4 my-5">Account List</h1>
-            <div id="accountList" className="accordion overflow-auto" style={ { height: `60vh` } }>
-                <div className="list-group">
+    if (isLoading)
+        return <div>Loading...</div>;
+    else
+        return (
+            <div style={ { height: `88vh` } }>
+                <h1 className="text-center txtJasper display-4 my-5">Account List</h1>
+                <div id="accountList" className="accordion overflow-auto" style={ { height: `60vh` } }>
                     { accounts.map((item, key) => (
-                        <div key={ key }>
-                            <div className={ `list-group-item list-group-item-action list-group-item-${mode} rounded` }>{ item.name }</div>
+                        <div key={ key } className="accordion-item bgRed">
+                            <div className="accordion-header d-grid rounded">
+                                <div className="btn-group">
+                                    <button className={ `btn btn-${mode} text-${contrast()} collapsed` } data-bs-toggle="collapse" data-bs-target={ `#account${key}` } aria-expanded="false" aria-controls={ `account${key}` }>
+                                        <span>{ item.name }</span>
+                                        <span className="dropdown-toggle ms-5" />
+                                    </button>
+                                </div>
+                            </div>
+                            <div id={ `account${key}` } className={ `accordion collapse bg-${mode}` } data-bs-parent="#accountList">
+                                <div className="accordion-body">
+                                    <div className="d-grid flex-fill">
+                                        <button className={ `btn btn-outline-${contrast()} my-3` } onClick={ () => setEditAccount(item) } data-bs-toggle="modal" data-bs-target={ `#editAccountPopup${key}` } data-bs-keyboard="false">View { item.name }'s Details</button>
+                                        <div id={ `editAccountPopup${key}` } className="modal fade" data-bs-backdrop="static">
+                                            <div className="modal-dialog modal-dialog-centered">
+                                                <div className={ `modal-content bg-${mode}` }>
+                                                    <div className="modal-header">
+                                                        <h1 className="display-6">{ item.name }</h1>
+                                                        <button className="btn btn-close bg-light" data-bs-dismiss="modal" />
+                                                    </div>
+                                                    <div className="modal-body">
+                                                        <div className="input-group mb-3">
+                                                            <span className="input-group-text">Name</span>
+                                                            <input type="email" className="form-control" value={ name } onChange={ (x) => setName(x.target.value) } />
+                                                        </div>
+                                                        <div className="input-group mb-3">
+                                                            <span className="input-group-text">Email</span>
+                                                            <input type="email" className="form-control" value={ email } onChange={ (x) => setEmail(x.target.value) } />
+                                                        </div>
+                                                        <div className="input-group mb-3">
+                                                            <span className="input-group-text">Phone</span>
+                                                            <input type="email" className="form-control" value={ phone } onChange={ (x) => setPhone(x.target.value) } />
+                                                        </div>
+                                                    </div>
+                                                    <div className="modal-footer">
+                                                        <div className="d-grid flex-fill">
+                                                            <button className={ `btn btn-${contrast()} mb-2` }>Save</button>
+                                                            <button className="btn btn-danger">Delete</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     )) }
                 </div>
-
-                {/* { accounts.map((item, key) => (
-                    <div className="accordion-item" key={ key }>
-                        <h1 className="accordion-header">
-                            <button className="accordion-button collapsed" onClick={ () => setEditAccount(item) } data-bs-toggle="collapse" data-bs-target={ `#account${key}` } aria-expanded="false" aria-controls={ `account${key}` }>
-                                { item.name }
-                            </button>
-                        </h1>
-                        <div id={ `account${key}` } className="accordion-collapse collapse" data-bs-parent="#accountList">
-                            <div className="accordion-body">
-                                <ul className="list-group">
-                                    <li className="list-group-item">
-                                        <div className="input-group">
-                                            <span className="input-group-text">Name</span>
-                                            <span className={ `input-group-text bg-${mode} text-${contrast()}` }>{ item.name }</span>
-                                        </div>
-                                    </li>
-                                    <li className="list-group-item">
-                                        <div className="input-group">
-                                            <span className="input-group-text">Email</span>
-                                            <span className={ `input-group-text bg-${mode} text-${contrast()}` }>{ item.email }</span>
-                                        </div>
-                                    </li>
-                                    <li className="list-group-item">
-                                        <div className="input-group">
-                                            <span className="input-group-text">Phone</span>
-                                            <span className={ `input-group-text bg-${mode} text-${contrast()}` }>({ item.phone.$numberLong.slice(0, 3) })-{ item.phone.$numberLong.slice(3, 6) }-{ item.phone.$numberLong.slice(6) }</span>
-                                        </div>
-                                    </li>
-                                    <li className="list-group-item border-0 d-grid"><button className="btn btn-dark" onClick={ () => onUpdateAccount(item.phone) } disabled>Edit Account</button></li>
-                                    <li className="list-group-item border-0 d-grid"><button className="btn btn-danger" onClick={ () => onDeleteAccount(item._id.$oid) }>Remove Account</button></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                )) } */}
             </div>
-        </div>
-    );
+        );
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(AccountList);

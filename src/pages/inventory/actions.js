@@ -4,8 +4,12 @@ export const createItem = (item) => ({
     type: CREATE_ITEM,
     payload: {
         name: item.name,
-        price: item.price,
-        quantity: item.quantity
+        price: {
+            $numberInt: item.price
+        },
+        quantity: {
+            $numberInt: item.quantity
+        }
     }
 });
 
@@ -24,8 +28,12 @@ export const updateItem = (item) => ({
     type: UPDATE_ITEM,
     payload: {
         name: item.name,
-        price: item.price,
-        quantity: item.quantity
+        price: {
+            $numberInt: item.price
+        },
+        quantity: {
+            $numberInt: item.quantity
+        }
     }
 });
 
