@@ -18,13 +18,13 @@ export const loadAccounts = () => async (dispatch, getState) => {
 };
 
 // CREATE ACCOUNT
-export const createAccount = (account) => async (dispatch, getState) => {
+export const createAccount = ({ name, email, phone }) => async (dispatch, getState) => {
     const requestOptions = {
         method: "POST",
         body: JSON.stringify({
-            name: account.name,
-            email: account.email,
-            phone: { $numberLong: account.phone }
+            name: name,
+            email: email,
+            phone: { $numberLong: phone }
         })
     };
     await fetch("https://us-east-1.aws.webhooks.mongodb-realm.com/api/client/v2.0/app/jasperdevx-daptd/service/accounts/incoming_webhook/addAccount", requestOptions)
@@ -41,10 +41,20 @@ export const deleteAccount = (id) => async (dispatch, getState) => {
 };
 
 // UPDATE ACCOUNT
-export const updateAccount = () => async (dispatch, getState) => {
-    try {
-
-    } catch (err) {
-        console.error("ERROR UPDATE ACCOUNT: ", err);
-    }
+export const updateAccount = ({ oid, name, email, phone }) => async (dispatch, getState) => {
+    const requestOptions = {
+        method: "PUT",
+        body: JSON.stringify({
+            _id: {
+                $oid: oid
+            },
+            name,
+            email,
+            phone: {
+                $numberLong: phone
+            }
+        })
+    };
+    await fetch("https://us-east-1.aws.webhooks.mongodb-realm.com/api/client/v2.0/app/jasperdevx-daptd/service/accounts/incoming_webhook/updateAccount", requestOptions)
+        .catch((err) => console.error("ERROR UPDATE ACCOUNT: ", err));
 };

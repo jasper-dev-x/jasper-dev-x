@@ -27,6 +27,9 @@ export const UPDATE_ITEM = 'UPDATE_ITEM';
 export const updateItem = (item) => ({
     type: UPDATE_ITEM,
     payload: {
+        _id: {
+            $oid: item.oid
+        },
         name: item.name,
         price: {
             $numberInt: item.price

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { deleteAccount as deleteSeshAccount, updateAccount } from '../actions';
-import { loadAccounts, deleteAccount as deleteDBAccount } from '../thunks';
+import { deleteAccount as deleteSeshAccount, updateAccount as updateSeshAccount } from '../actions';
+import { loadAccounts, deleteAccount as deleteDBAccount, updateAccount as updateDBAccount } from '../thunks';
 
 const mapStateToProps = state => ({
     accounts: state.accounts,
@@ -9,13 +9,16 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    onDeleteSeshAccount: (id) => dispatch(deleteSeshAccount(id)),
-    onDeleteDBAccount: (id) => dispatch(deleteDBAccount(id)),
-    onUpdateAccount: (account) => dispatch(updateAccount(account)),
+    onSeshDeleteAccount: (id) => dispatch(deleteSeshAccount(id)),
+    onDBDeleteAccount: (id) => dispatch(deleteDBAccount(id)),
+    onSeshUpdateAccount: (account) => dispatch(updateSeshAccount(account)),
+    onDBUpdateAccount: (account) => dispatch(updateDBAccount(account)),
     startLoadingAccounts: () => dispatch(loadAccounts())
 });
 
-export function AccountList({ mode, accounts = [], isLoading, onDeleteSeshAccount, onDeleteDBAccount, onUpdateAccount, startLoadingAccounts }) {
+export function AccountList({ mode, accounts = [], isLoading, onSeshDeleteAccount, onDBDeleteAccount, onSeshUpdateAccount, onDBUpdateAccount, startLoadingAccounts }) {
+    // eslint-disable-next-line
+    const [oid, setOid] = useState('');
     // eslint-disable-next-line
     const [name, setName] = useState('');
     // eslint-disable-next-line
@@ -29,6 +32,7 @@ export function AccountList({ mode, accounts = [], isLoading, onDeleteSeshAccoun
     }, [startLoadingAccounts]);
 
     function setEditAccount(account) {
+        setOid(account._id.$oid);
         setName(account.name);
         setPhone(account.phone.$numberLong);
         setEmail(account.email);
@@ -36,10 +40,18 @@ export function AccountList({ mode, accounts = [], isLoading, onDeleteSeshAccoun
 
     function onDeleteAccount(id) {
         try {
-            onDeleteSeshAccount(id);
-            onDeleteDBAccount(id);
+            onSeshDeleteAccount(id);
+            onDBDeleteAccount(id);
         } catch (err) {
-            console.error("ERROR DELETE ACCOUNT AccountList.js: ", err);
+            console.error("ERROR ON DELETE ACCOUNT AccountList.js: ", err);
+        }
+    }
+    function onUpdateAccount(account) {
+        try {
+            onSeshUpdateAccount(account);
+            onDBUpdateAccount(account);
+        } catch (err) {
+            console.error("ERROR ON UPDATE ACCOUNT AccountList.js: ", err);
         }
     }
 
@@ -68,13 +80,13 @@ export function AccountList({ mode, accounts = [], isLoading, onDeleteSeshAccoun
                                             <div className="modal-dialog modal-dialog-centered">
                                                 <div className={ `modal-content bg-${mode}` }>
                                                     <div className="modal-header">
-                                                        <h1 className="display-6">{ item.name }</h1>
+                                                        <h1 className={ `display-6 text-${contrast()}` }>{ item.name }</h1>
                                                         <button className="btn btn-close bg-light" data-bs-dismiss="modal" />
                                                     </div>
                                                     <div className="modal-body">
                                                         <div className="input-group mb-3">
                                                             <span className="input-group-text">Name</span>
-                                                            <input type="email" className="form-control" value={ name } onChange={ (x) => setName(x.target.value) } />
+                                                            <input type="text" className="form-control" value={ name } onChange={ (x) => setName(x.target.value) } />
                                                         </div>
                                                         <div className="input-group mb-3">
                                                             <span className="input-group-text">Email</span>
@@ -82,13 +94,13 @@ export function AccountList({ mode, accounts = [], isLoading, onDeleteSeshAccoun
                                                         </div>
                                                         <div className="input-group mb-3">
                                                             <span className="input-group-text">Phone</span>
-                                                            <input type="email" className="form-control" value={ phone } onChange={ (x) => setPhone(x.target.value) } />
+                                                            <input type="phone" className="form-control" value={ phone } onChange={ (x) => setPhone(x.target.value) } />
                                                         </div>
                                                     </div>
                                                     <div className="modal-footer">
                                                         <div className="d-grid flex-fill">
-                                                            <button className={ `btn btn-${contrast()} mb-2` }>Save</button>
-                                                            <button className="btn btn-danger">Delete</button>
+                                                            <button className={ `btn btn-${contrast()} mb-2` } onClick={ () => onUpdateAccount({ oid, name, phone, email }) } data-bs-dismiss="modal">Save</button>
+                                                            <button className="btn btn-danger" onClick={ () => onDeleteAccount(oid) } data-bs-dismiss="modal">Delete</button>
                                                         </div>
                                                     </div>
                                                 </div>

@@ -30,7 +30,7 @@ export const accounts = (state = [], action) => {
             const newAccount = {
                 name,
                 email,
-                phone: { $numberLong: phone }
+                phone
             };
             return state.concat(newAccount);
         }
@@ -44,7 +44,7 @@ export const accounts = (state = [], action) => {
                 _id,
                 name,
                 email,
-                phone: { $numberLong: phone }
+                phone
             };
             return state.filter((account) => account._id.$oid !== _id.$oid).concat(updatedAccount);
         }

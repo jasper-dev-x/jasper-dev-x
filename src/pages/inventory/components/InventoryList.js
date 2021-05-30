@@ -1,20 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { deleteItem, updateItem } from '../actions';
-import { loadInventory, deleteItem as deleteDBItem } from '../thunks';
+import { deleteItem as deleteSeshItem, updateItem as updateSeshItem } from '../actions';
+import { loadInventory, deleteItem as deleteDBItem, updateItem as updateDBItem } from '../thunks';
 
 const mapStateToProps = state => ({
     inventory: state.inventory
 });
 
 const mapDispatchToProps = dispatch => ({
-    onSeshDeleteItem: (id) => dispatch(deleteItem(id)),
+    onSeshDeleteItem: (id) => dispatch(deleteSeshItem(id)),
     onDBDeleteItem: (id) => dispatch(deleteDBItem(id)),
-    onUpdateItem: (item) => dispatch(updateItem(item)),
+    onSeshUpdateItem: (item) => dispatch(updateSeshItem(item)),
+    onDBUpdateItem: (item) => dispatch(updateDBItem(item)),
     startLoadingInventory: () => dispatch(loadInventory())
 });
 
-export function InventoryList({ mode, inventory = [], onSeshDeleteItem, onDBDeleteItem, onUpdateItem, startLoadingInventory }) {
+export function InventoryList({ mode, inventory = [], onSeshDeleteItem, onDBDeleteItem, onSeshUpdateItem, onDBUpdateItem, startLoadingInventory }) {
     const [oid, setOid] = useState('');
     const [name, setName] = useState('');
     const [price, setPrice] = useState('');
@@ -29,6 +30,11 @@ export function InventoryList({ mode, inventory = [], onSeshDeleteItem, onDBDele
         setName(item.name);
         setPrice(item.price.$numberInt);
         setQuantity(item.quantity.$numberInt);
+    }
+
+    function onUpdateItem(item) {
+        onSeshUpdateItem(item);
+        onDBUpdateItem(item);
     }
 
     const contrast = () => { return mode === 'light' ? 'dark' : 'light'; };
@@ -101,7 +107,7 @@ export function InventoryList({ mode, inventory = [], onSeshDeleteItem, onDBDele
                                     </div>
                                     <div className="row">
                                         <div className="d-grid flex-c">
-                                            <button className={ `btn btn-${contrast()} mb-3` } data-bs-dismiss="modal" onClick={ () => onUpdateItem({ name, price, quantity }) } disabled>Save</button>
+                                            <button className={ `btn btn-${contrast()} mb-3` } data-bs-dismiss="modal" onClick={ () => onUpdateItem({ oid, name, price, quantity }) }>Save</button>
                                             <button className="btn btn-danger" data-bs-dismiss="modal" onClick={ () => {
                                                 onSeshDeleteItem(oid);
                                                 onDBDeleteItem(oid);

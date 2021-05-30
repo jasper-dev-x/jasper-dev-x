@@ -39,13 +39,14 @@ export const inventory = (state = [], action) => {
             return state.filter((item) => item._id.$oid !== id);
         }
         case UPDATE_ITEM: {
-            const { name, price, quantity } = payload;
+            const { _id, name, price, quantity } = payload;
             const updatedItem = {
+                _id,
                 name,
                 price,
                 quantity
             };
-            return state.filter((item) => item.name !== name).concat(updatedItem);
+            return state.filter((item) => item._id.$oid !== _id.$oid).concat(updatedItem);
         }
         case LOAD_INVENTORY_SUCCESS: {
             const { inventory } = payload;

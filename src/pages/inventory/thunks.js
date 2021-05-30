@@ -45,3 +45,24 @@ export const deleteItem = (id) => async (dispatch, getState) => {
 };
 
 // UPDATE ITEM
+
+export const updateItem = (item) => async (dispatch, getState) => {
+    const { oid, name, price, quantity } = item;
+    const requestOptions = {
+        method: "PUT",
+        body: JSON.stringify({
+            _id: {
+                $oid: oid
+            },
+            name,
+            price: {
+                $numberInt: price
+            },
+            quantity: {
+                $numberInt: quantity
+            }
+        })
+    };
+    await fetch("https://us-east-1.aws.webhooks.mongodb-realm.com/api/client/v2.0/app/jasperdevx-daptd/service/inventory/incoming_webhook/updateItem", requestOptions)
+        .catch((err) => console.error("ERROR UPDATE ITEM: ", err));
+};

@@ -1,11 +1,13 @@
 // ----- CREATE ----- //
 export const CREATE_ACCOUNT = 'CREATE_ACCOUNT';
-export const createAccount = (account) => ({
+export const createAccount = ({ name, email, phone }) => ({
     type: CREATE_ACCOUNT,
     payload: {
-        name: account.name,
-        email: account.email,
-        phone: account.phone
+        name,
+        email,
+        phone: {
+            $numberLong: phone
+        }
     }
 });
 
@@ -20,13 +22,17 @@ export const deleteAccount = (id) => ({
 
 // ----- UPDATE ----- //
 export const UPDATE_ACCOUNT = 'UPDATE_ACCOUNT';
-export const updateAccount = (account) => ({
+export const updateAccount = ({ oid, name, email, phone }) => ({
     type: UPDATE_ACCOUNT,
     payload: {
-        _id: account._id,
-        name: account.name,
-        email: account.email,
-        phone: account.phone
+        _id: {
+            $oid: oid
+        },
+        name,
+        email,
+        phone: {
+            $numberLong: phone
+        }
     }
 });
 
