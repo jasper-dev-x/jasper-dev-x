@@ -4,10 +4,8 @@ import InventoryForm from './components/InventoryForm';
 import InventoryList from './components/InventoryList';
 
 export function InventoryPage({ mode }) {
-    const contrast = () => mode === 'light' ? 'dark' : 'light';
-
     return (
-        <div className={ `d-flex flex-fill text-center text-${contrast()}` }>
+        <div className={ `d-flex flex-fill text-center text-${mode.txt}` }>
             <div className="container">
                 <div className="row">
                     <div className="col-md-6">

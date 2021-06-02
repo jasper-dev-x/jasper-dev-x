@@ -3,6 +3,9 @@ export const CREATE_ACCOUNT = 'CREATE_ACCOUNT';
 export const createAccount = ({ name, email, phone }) => ({
     type: CREATE_ACCOUNT,
     payload: {
+        _id: {
+            $oid: "reload"
+        },
         name,
         email,
         phone: {

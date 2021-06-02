@@ -9,7 +9,10 @@ import AccountPage from './pages/accounts';
 import InventoryPage from './pages/inventory';
 
 function App() {
-  const [mode, setMode] = useState(sessionStorage.getItem('mode') ? sessionStorage.getItem('mode') : 'light');
+  const [mode, setMode] = useState({
+    bg: sessionStorage.getItem('modeBg') ? sessionStorage.getItem('modeBg') : 'light',
+    txt: sessionStorage.getItem('modeTxt') ? sessionStorage.getItem('modeTxt') : 'dark',
+  });
   useEffect(() => {
     var xApp = document.getElementById('appBody');
     xApp.classList.add('modeFade');
@@ -18,12 +21,12 @@ function App() {
   return (
     <div className={ `bg-danger` } style={ { height: window.innerHeight } }>
       <BrowserRouter>
-        <div className={ `d-flex flex-fill flex-column bg-${mode}` }>
+        <div className={ `d-flex flex-fill flex-column bg-${mode.bg}` }>
           {/* HEADER 12% HEIGHT */ }
           <Header mode={ mode } setMode={ setMode } />
 
           {/* BODY 88% HEIGHT */ }
-          <div id="appBody" className={ `d-flex flex-fill bg-${mode}` } style={ { minHeight: `88vh`, marginTop: `12vh` } }>
+          <div id="appBody" className={ `d-flex flex-fill bg-${mode.bg}` } style={ { minHeight: `88vh`, marginTop: `12vh` } }>
             <Switch>
               <Route path="/" exact>
                 <Home mode={ mode } />

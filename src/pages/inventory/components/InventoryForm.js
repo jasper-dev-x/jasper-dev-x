@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { createItem as createSeshItem } from '../actions';
 import { createItem as createDBItem } from '../thunks';
+import FormName from './FormName';
+import FormPrice from './FormPrice';
+import FormQuantity from './FormQuantity';
 
 const mapDispatchToProps = dispatch => ({
     onCreateSeshItem: (item) => dispatch(createSeshItem(item)),
@@ -13,8 +16,15 @@ export function InventoryForm({ mode, onCreateDBItem, onCreateSeshItem }) {
     const [price, setPrice] = useState('');
     const [quantity, setQuantity] = useState('');
 
-    function addItem(item) {
+    function addItem() {
+        const item = {
+            name,
+            price,
+            quantity
+        };
         try {
+            if (name === '' || price === '' || quantity === '')
+                return;
             onCreateDBItem(item);
             onCreateSeshItem(item);
             setName('');
@@ -25,34 +35,17 @@ export function InventoryForm({ mode, onCreateDBItem, onCreateSeshItem }) {
             console.error("ERROR ADD ITEM InventoryForm.js: ", err);
         }
     }
-    const contrast = () => { return mode === 'light' ? 'dark' : 'light'; };
 
     return (
-        <div className="container" style={ { height: `88vh` } }>
+        <form className="container" style={ { height: `88vh` } }>
             <h1 className={ `txtJasper display-4 py-3` }>Inventory Form</h1>
-            <div className="input-group mb-3">
-                <span className="input-group-text bgRed">Name</span>
-                <input type="text" className="form-control" value={ name } onChange={ (x) => setName(x.target.value) } />
-            </div>
-            <div className="col">
-                <div className="input-group mb-3">
-                    <span className="input-group-text">Price</span>
-                    <span className={ `input-group-text bg-${mode} text-${contrast()}` }>$</span>
-                    <input type="number" className="form-control" placeholder="0" value={ price } onChange={ (x) => setPrice(x.target.value) } />
-                    <span className={ `input-group-text bg-${mode} text-${contrast()}` }>.00</span>
-                </div>
-            </div>
-            <div className="col">
-                <div className="input-group mb-3">
-                    <span className="input-group-text">Qty</span>
-                    <input type="number" className="form-control" value={ quantity } onChange={ (x) => setQuantity(x.target.value) } />
-                </div>
-            </div>
-
+            <FormName name={ name } setName={ setName } />
+            <FormPrice mode={ mode } price={ price } setPrice={ setPrice } />
+            <FormQuantity quantity={ quantity } setQuantity={ setQuantity } />
             <div className="d-grid">
-                <button className="btn btn-outline-success" onClick={ () => addItem({ name, price, quantity }) }>Add Item</button>
+                <button className={ `btn btn-${mode.txt}` } onClick={ () => addItem() }>Add Item</button>
             </div>
-        </div >
+        </form>
     );
 }
 

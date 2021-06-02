@@ -26,8 +26,9 @@ export const accounts = (state = [], action) => {
 
     switch (type) {
         case CREATE_ACCOUNT: {
-            const { name, email, phone } = payload;
+            const { _id, name, email, phone } = payload;
             const newAccount = {
+                _id,
                 name,
                 email,
                 phone
