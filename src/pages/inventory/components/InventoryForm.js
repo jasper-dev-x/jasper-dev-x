@@ -43,7 +43,7 @@ export function InventoryForm({ mode, onCreateDBItem, onCreateSeshItem }) {
             <FormPrice mode={ mode } price={ price } setPrice={ setPrice } />
             <FormQuantity quantity={ quantity } setQuantity={ setQuantity } />
             <div className="d-grid">
-                <button className={ `btn btn-${mode.txt}` } onClick={ () => addItem() }>Add Item</button>
+                <button type="submit" className={ `btn btn-${mode.txt}` } onClick={ () => addItem() }>Add Item</button>
             </div>
         </form>
     );

@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
+import FormName from './FormName';
+import FormPrice from './FormPrice';
 import { deleteItem as deleteSeshItem, updateItem as updateSeshItem } from '../actions';
 import { loadInventory, deleteItem as deleteDBItem, updateItem as updateDBItem } from '../thunks';
 
@@ -26,6 +28,21 @@ export function InventoryList({ mode, inventory = [], onSeshDeleteItem, onDBDele
         startLoadingInventory();
     }, [startLoadingInventory]);
 
+    // FORM QUANTITY VALIDATION
+    useEffect(() => {
+        const formQuantity = document.getElementById("formQty");
+        if (quantity === "0") {
+            formQuantity.classList.remove("bg-warning");
+            formQuantity.classList.add("bg-danger");
+        }
+        else if (parseInt(quantity) < 10) {
+            formQuantity.classList.remove("bg-danger");
+            formQuantity.classList.add("bg-warning");
+        }
+        else
+            formQuantity.classList.remove("bg-warning", "bg-danger");
+    }, [quantity]);
+
     function setEditForm(item) {
         setOid(item._id.$oid);
         setName(item.name);
@@ -33,9 +50,15 @@ export function InventoryList({ mode, inventory = [], onSeshDeleteItem, onDBDele
         setQuantity(item.quantity.$numberInt);
     }
 
-    function onUpdateItem(item) {
+    function onUpdateItem() {
+        const item = { oid, name, price, quantity };
         onSeshUpdateItem(item);
         onDBUpdateItem(item);
+    }
+
+    function onDeleteItem() {
+        onSeshDeleteItem(oid);
+        onDBDeleteItem(oid);
     }
 
     if (isLoading)
@@ -49,7 +72,7 @@ export function InventoryList({ mode, inventory = [], onSeshDeleteItem, onDBDele
             <div style={ { height: `88vh` } }>
                 <h1 className={ `txtJasper display-4 py-3` }>Inventory List</h1>
                 <div className="shadow">
-
+                    {/* TABLE HEADER */ }
                     <table className="table text-center lead user-select-none">
                         <thead>
                             <tr className="bgRed">
@@ -60,53 +83,69 @@ export function InventoryList({ mode, inventory = [], onSeshDeleteItem, onDBDele
                             </tr>
                         </thead>
                     </table>
+
+                    {/* TABLE BODY */ }
                     <div className="overflow-auto" style={ { height: `60vh` } } >
-                        <table className="table text-center table-hover lead user-select-none table-striped">
-                            <tbody>
-                                { inventory.map((item, key) => (
-                                    <tr key={ key } onClick={ () => setEditForm(item) } data-bs-toggle="modal" data-bs-target="#editPopup" className={ `table-${mode.bg}` }>
-                                        <td className="col-1 py-2">{ key + 1 }</td>
-                                        <td className="col py-2">{ item.name }</td>
-                                        <td className="col-3 py-2">${ item.price.$numberInt }.00</td>
-                                        <td className="col-2 py-2">x{ item.quantity.$numberInt }</td>
-                                    </tr>
-                                )) }
+                        <table className="table text-center table-hover lead table-striped">
+                            <tbody className="user-select-none">
+                                { inventory.map((item, key) => {
+                                    if (item.quantity.$numberInt === "0")
+                                        return (
+                                            <tr key={ key } onClick={ () => setEditForm(item) } data-bs-toggle="modal" data-bs-target="#editPopup" className="table-danger">
+                                                <td className="col-1 ">{ key + 1 }</td>
+                                                <td className="col">{ item.name }</td>
+                                                <td className="col-3">${ item.price.$numberInt }.00</td>
+                                                <td className="col-2">x{ item.quantity.$numberInt }</td>
+                                            </tr>
+                                        );
+                                    if (item.quantity.$numberInt < 10)
+                                        return (
+                                            <tr key={ key } onClick={ () => setEditForm(item) } data-bs-toggle="modal" data-bs-target="#editPopup" className="table-warning">
+                                                <td className="col-1 py-2">{ key + 1 }</td>
+                                                <td className="col py-2">{ item.name }</td>
+                                                <td className="col-3 py-2">${ item.price.$numberInt }.00</td>
+                                                <td className="col-2 py-2">x{ item.quantity.$numberInt }</td>
+                                            </tr>
+                                        );
+                                    return (
+                                        <tr key={ key } onClick={ () => setEditForm(item) } data-bs-toggle="modal" data-bs-target="#editPopup" className={ `table-${mode.bg}` }>
+                                            <td className="col-1 py-2">{ key + 1 }</td>
+                                            <td className="col py-2">{ item.name }</td>
+                                            <td className="col-3 py-2">${ item.price.$numberInt }.00</td>
+                                            <td className="col-2 py-2">x{ item.quantity.$numberInt }</td>
+                                        </tr>
+                                    );
+                                }) }
                             </tbody>
                         </table>
+
+                        {/* DETAILS POPUP */ }
                         <div className="modal fade" id="editPopup" tabIndex="-1">
                             <div className="modal-dialog modal-dialog-centered">
                                 <div className={ `modal-content bg-${mode.bg}` }>
-                                    <div className="modal-header">
+                                    <div className="modal-body d-flex justify-content-between align-items-center">
                                         <span className="display-6">{ name }</span>
-                                        <span className="btn btn-sm btn-close bg-light" data-bs-dismiss="modal" />
+                                        <span className="btn btn-close bg-light" data-bs-dismiss="modal" />
                                     </div>
                                     <div className="modal-body">
-                                        <div className="input-group mb-3">
-                                            <span className="input-group-text">Name</span>
-                                            <input type="text" className="form-control" value={ name } onChange={ (x) => setName(x.target.value) } />
-                                        </div>
-                                        <div className="input-group mb-3">
-                                            <span className="input-group-text">Price</span>
-                                            <span className={ `input-group-text bg-${mode.bg} text-${mode.txt}` }>$</span>
-                                            <input type="number" className="form-control" value={ price } onChange={ (x) => setPrice(x.target.value) } />
-                                            <span className={ `input-group-text bg-${mode.bg} text-${mode.txt}` }>.00</span>
-                                        </div>
+                                        <FormName mode={ mode } name={ name } setName={ setName } />
+                                        <FormPrice mode={ mode } price={ price } setPrice={ setPrice } />
                                         <div className="input-group mb-3">
                                             <span className="input-group-text rounded me-2">Qty</span>
                                             <button className="btn btn-outline-success rounded" onClick={ () => setQuantity((parseInt(quantity) + 1).toString()) }>+</button>
-                                            <input type="number" className="form-control" value={ quantity } onChange={ (x) => setQuantity(x.target.value) } />
+                                            <input id="formQty" type="number" className="form-control" value={ quantity } onChange={ (x) => setQuantity(x.target.value) } />
                                             <button className="btn btn-outline-danger rounded" onClick={ () => setQuantity(quantity <= 0 ? "0" : (parseInt(quantity) - 1).toString()) }>-</button>
                                         </div>
                                     </div>
                                     <div className="modal-body">
-                                        <div className="d-grid flex-c">
-                                            <button className={ `btn btn-${mode.txt} mb-3` } data-bs-dismiss="modal" onClick={ () => onUpdateItem({ oid, name, price, quantity }) }>Save</button>
-                                            <button className="btn btn-danger" data-bs-dismiss="modal" onClick={ () => {
-                                                onSeshDeleteItem(oid);
-                                                onDBDeleteItem(oid);
-                                            } }>
-                                                Delete
-                                        </button>
+                                        <div className="d-flex">
+                                            <div className="col d-grid">
+                                                <button className={ `btn btn-${mode.txt}` } data-bs-dismiss="modal" onClick={ () => onUpdateItem() }>Save</button>
+                                            </div>
+                                            <div className="col-1" />
+                                            <div className="col d-grid">
+                                                <button className="btn btn-danger" data-bs-dismiss="modal" onClick={ () => onDeleteItem() }>Delete</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

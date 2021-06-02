@@ -95,7 +95,7 @@ export function AccountList({ mode, accounts = [], isLoading, onSeshDeleteAccoun
                                 <div className="accordion-body">
                                     <div className="d-grid flex-fill">
                                         {/* VIEW DETAILS BUTTON */ }
-                                        <button className={ `btn btn-${mode.txt} my-3` } onClick={ () => setEditAccount(item) } data-bs-toggle="modal" data-bs-target={ `#editAccountPopup${key}` } data-bs-keyboard="false">View { item.name }'s Details</button>
+                                        <button className={ `btn btn-${mode.txt} mb-3` } onClick={ () => setEditAccount(item) } data-bs-toggle="modal" data-bs-target={ `#editAccountPopup${key}` } data-bs-keyboard="false">View { item.name }'s Details</button>
 
                                         {/* DELETE BUTTON */ }
                                         <button className="btn btn-secondary" onClick={ () => setEditAccount(item) } data-bs-toggle="modal" data-bs-target={ `#deleteAccountPopup${key}` }>Delete { item.name }'s Account</button>
@@ -112,9 +112,14 @@ export function AccountList({ mode, accounts = [], isLoading, onSeshDeleteAccoun
                                                         <p className="display-6">{ name }</p>
                                                     </div>
                                                     <div className="modal-body">
-                                                        <div className="d-flex flex-fill justify-content-around">
-                                                            <button className="btn btn-danger" data-bs-dismiss="modal" onClick={ () => onDeleteAccount(oid) }>Delete</button>
-                                                            <button className={ `btn btn-${mode.txt}` } data-bs-dismiss="modal">Cancel</button>
+                                                        <div className="d-flex flex-fill">
+                                                            <div className="col d-grid">
+                                                                <button className="btn btn-danger" data-bs-dismiss="modal" onClick={ () => onDeleteAccount(oid) }>Delete</button>
+                                                            </div>
+                                                            <div className="col-1" />
+                                                            <div className="col d-grid">
+                                                                <button className={ `btn btn-${mode.txt}` } data-bs-dismiss="modal">Cancel</button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>

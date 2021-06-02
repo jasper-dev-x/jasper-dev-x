@@ -3,7 +3,7 @@ import React from 'react';
 export function MenuList({ mode, menu }) {
 
     return (
-        <ul className="list-group shadow bgRed rounded-3 overflow-auto" style={ { height: `58vh` } }>
+        <ul className="list-group shadow bgRed rounded-3 overflow-auto pb-5" style={ { height: `58vh` } }>
             { menu.map((item, key) => {
                 if (item.quantity.$numberInt === "0")
                     return <div></div>;
