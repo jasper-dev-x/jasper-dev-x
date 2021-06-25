@@ -15,6 +15,8 @@ export function InventoryForm({ mode, onCreateDBItem, onCreateSeshItem }) {
     const [name, setName] = useState('');
     const [price, setPrice] = useState('');
     const [quantity, setQuantity] = useState('');
+    const height = window.screen.height * .72;
+    const minHeight = `88vh`;
 
     function addItem() {
         const item = {
@@ -37,7 +39,7 @@ export function InventoryForm({ mode, onCreateDBItem, onCreateSeshItem }) {
     }
 
     return (
-        <form className="container" style={ { height: `88vh` } }>
+        <form className={ `container bg-${mode.bg}` } style={ { minHeight, height } }>
             <h1 className={ `txtJasper display-4 py-3` }>Inventory Form</h1>
             <FormName name={ name } setName={ setName } />
             <FormPrice mode={ mode } price={ price } setPrice={ setPrice } />

@@ -4,13 +4,12 @@ import storage from 'redux-persist/lib/storage';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import thunk from 'redux-thunk';
 import { accounts, accountsAreLoading } from './pages/accounts/reducers';
-import { inventory, inventoryIsLoading } from './pages/inventory/reducers';
+import { inventory } from './pages/inventory/reducers';
 
 const reducers = {
     accounts,
     accountsAreLoading,
     inventory,
-    inventoryIsLoading
 };
 
 const persistConfig = {

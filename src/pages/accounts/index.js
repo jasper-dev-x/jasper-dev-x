@@ -5,7 +5,7 @@ import AccountList from './components/AccountList';
 
 export function Accounts({ mode }) {
     return (
-        <div className={ `container d-flex flex-fill flex-column text-${mode.txt}` } >
+        <div className={ `d-flex flex-fill flex-column bg-${mode.bg} text-${mode.txt}` } >
             <AccountList mode={ mode } />
             <AccountForm mode={ mode } />
         </div>

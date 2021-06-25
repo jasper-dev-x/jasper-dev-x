@@ -6,9 +6,11 @@ export default function Header({ mode, setMode = x => x }) {
     const XY = 30;
     const changeMode = () => { mode.bg === 'light' ? setMode({ bg: 'dark', txt: 'light' }) : setMode({ bg: 'light', txt: 'dark' }); };
     const links = ['accounts', 'inventory', 'menu'];
+    const height = window.screen.height * .1;
+    const minHeight = `12vh`;
 
     return (
-        <div className={ `d-flex fixed-top centerFlex bg-${mode.bg} shadow` } style={ { minHeight: `80px`, height: `12vh` } }>
+        <div className={ `d-flex fixed-top centerFlex bg-${mode.bg} shadow` } style={ { height, minHeight } }>
             <div className="d-flex flex-fill px-3">
                 <div className="d-flex centerFlex">
                     <div className={ `btn btn-${mode.bg}` } onClick={ () => changeMode() }>
@@ -21,19 +23,23 @@ export default function Header({ mode, setMode = x => x }) {
                 <div className="d-flex centerFlex flex-grow-1">
                     <Link to="/">
                         <div className={ `card bg-${mode.bg} border-0` }>
-                            <img src={ SPADE } alt="..." width={ XY * 2.5 } />
+                            <img src={ SPADE } alt="..." height={ XY * 2.2 } />
                             <div className="card-img-overlay d-flex centerFlex">
                                 <span className={ `txtJasper text-${mode.txt} pb-1` } style={ { fontSize: XY - 6 } }>J</span>
                             </div>
                         </div>
                     </Link>
                 </div>
+
+                {/* SIDE MENU */ }
                 <div className="d-flex centerFlex">
+                    {/* SIDE BUTTON */ }
                     <button className={ `btn btn-outline-${mode.bg} border-0` } data-bs-toggle="offcanvas" data-bs-target="#offcanvasNav">
                         <svg xmlns="http://www.w3.org/2000/svg" width={ XY } height={ XY } fill="#9A182B" className="bi bi-list" viewBox="0 0 16 16">
                             <path fillRule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z" />
                         </svg>
                     </button>
+                    {/* SIDE MENU */ }
                     <div id="offcanvasNav" className="offcanvas offcanvas-end d-flex" tabIndex="-1">
                         <div className="offcanvas-header centerFlex bgRed rounded">
                             <h1 className="display-5 txtJasper">Jasper.Dev.X</h1>

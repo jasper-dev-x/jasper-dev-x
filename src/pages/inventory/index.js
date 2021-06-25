@@ -7,13 +7,11 @@ export function InventoryPage({ mode }) {
     return (
         <div className={ `d-flex flex-fill text-center text-${mode.txt}` }>
             <div className="container">
-                <div className="row">
-                    <div className="col-md-6">
-                        <InventoryList mode={ mode } />
-                    </div>
-                    <div className="col-md-6">
-                        <InventoryForm mode={ mode } />
-                    </div>
+                <div className="col">
+                    <InventoryList mode={ mode } />
+                </div>
+                <div className="col">
+                    <InventoryForm mode={ mode } />
                 </div>
             </div>
         </div>

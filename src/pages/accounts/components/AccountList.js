@@ -28,6 +28,8 @@ export function AccountList({ mode, accounts = [], isLoading, onSeshDeleteAccoun
     const [phone, setPhone] = useState({ a: '', b: '', c: '' });
     // eslint-disable-next-line
     const [email, setEmail] = useState('');
+    const height = window.screen.height * .72;
+    const minHeight = `88vh`;
 
     useEffect(() => {
         startLoadingAccounts();
@@ -71,14 +73,14 @@ export function AccountList({ mode, accounts = [], isLoading, onSeshDeleteAccoun
     }
 
     if (isLoading)
-        return <div className="d-flex flex-fill centerFlex" style={ { height: `88vh` } }>
+        return <div className="d-flex flex-fill centerFlex" style={ { minHeight, height } }>
             <span className={ `display-3 txtJasper text-${mode.txt}` }>Loading...</span>
         </div>;
     else
         return (
-            <div className="container-fluid" style={ { height: `88vh` } }>
+            <div className="container" style={ { height, minHeight } }>
                 <h1 className="text-center txtJasper display-4 my-4">Account List</h1>
-                <div id="accountList" className="accordion overflow-auto px-2 bgRed shadow rounded" style={ { height: `60vh`, paddingBottom: `12vh` } }>
+                <div id="accountList" className="accordion overflow-auto px-2 pb-3 bgRed shadow rounded" style={ { height: `60vh` } }>
                     {/* ACCOUNT LIST */ }
                     { accounts.map((item, key) => (
                         <div key={ key } className="accordion-item bgRed mx-3 mt-3">

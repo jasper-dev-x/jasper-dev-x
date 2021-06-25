@@ -7,21 +7,9 @@ import {
     LOAD_INVENTORY_FAILURE
 } from './actions';
 
-export const inventoryIsLoading = (state = false, action) => {
-    const { type } = action;
+const initState = { isLoading: false, data: [] };
 
-    switch (type) {
-        case LOAD_INVENTORY_IN_PROGRESS:
-            return true;
-        case LOAD_INVENTORY_SUCCESS:
-        case LOAD_INVENTORY_FAILURE:
-            return false;
-        default:
-            return state;
-    }
-};
-
-export const inventory = (state = [], action) => {
+export const inventory = (state = initState, action) => {
     const { type, payload } = action;
 
     switch (type) {
@@ -32,11 +20,11 @@ export const inventory = (state = [], action) => {
                 price,
                 quantity
             };
-            return state.concat(newItem);
+            return { ...state, data: state.data.concat(newItem) };
         }
         case DELETE_ITEM: {
             const { id } = payload;
-            return state.filter((item) => item._id.$oid !== id);
+            return { ...state, data: state.data.filter((item) => item._id.$oid !== id) };
         }
         case UPDATE_ITEM: {
             const { _id, name, price, quantity } = payload;
@@ -46,17 +34,17 @@ export const inventory = (state = [], action) => {
                 price,
                 quantity
             };
-            return state.filter((item) => item._id.$oid !== _id.$oid).concat(updatedItem);
+            return { ...state, data: state.data.filter((item) => item._id.$oid !== _id.$oid).concat(updatedItem) };
         }
         case LOAD_INVENTORY_SUCCESS: {
             const { inventory } = payload;
-            return inventory ? inventory : state;
+            return inventory ? { ...state, isLoading: false, data: inventory } : state;
         }
         case LOAD_INVENTORY_IN_PROGRESS: {
-            return state;
+            return { ...state, isLoading: true };
         }
         case LOAD_INVENTORY_FAILURE: {
-            return state;
+            return { ...state, isLoading: false };
         }
         default:
             return state;

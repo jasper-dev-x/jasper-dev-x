@@ -3,10 +3,11 @@ import { connect } from 'react-redux';
 import { displayAlert, loadInventory } from '../inventory/thunks';
 import { MenuForm } from './components/MenuForm';
 import { MenuList } from './components/MenuList';
+import { getInventory, getIsInventoryLoading } from '../inventory/selectors';
 
 const mapStateToProps = state => ({
-    inventory: state.inventory,
-    isLoading: state.inventoryIsLoading
+    inventory: getInventory(state),
+    isLoading: getIsInventoryLoading(state),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -14,7 +15,7 @@ const mapDispatchToProps = dispatch => ({
     startLoadingInventory: () => dispatch(loadInventory())
 });
 
-export function Menu({ mode, inventory = [], onDisplayAlert = x => x, isLoading, startLoadingInventory = x => x }) {
+export function Menu({ mode, inventory = [], isLoading, startLoadingInventory = x => x }) {
     const [menu, setMenu] = useState(inventory);
     const [sort, setSort] = useState("0");
     const [search, setSearch] = useState("");
@@ -32,25 +33,30 @@ export function Menu({ mode, inventory = [], onDisplayAlert = x => x, isLoading,
             // HI -> LO
             case "1": {
                 setMenu(menu.sort((a, b) => b.price.$numberInt - a.price.$numberInt));
+                document.getElementById("menu").scrollTo(0, 0);
                 break;
             }
             // LO -> HI
             case "2": {
                 setMenu(menu.sort((a, b) => a.price.$numberInt - b.price.$numberInt));
+                document.getElementById("menu").scrollTo(0, 0);
                 break;
             }
             // A - Z
             case "3": {
                 setMenu(menu.sort((a, b) => (a.name.toLowerCase() < b.name.toLowerCase()) ? -1 : 1));
+                document.getElementById("menu").scrollTo(0, 0);
                 break;
             }
             // Z - A
             case "4": {
                 setMenu(menu.sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase()) ? -1 : 1));
+                document.getElementById("menu").scrollTo(0, 0);
                 break;
             }
             default: {
                 setMenu(inventory);
+                document.getElementById("menu").scrollTo(0, 0);
                 break;
             }
         }
@@ -64,7 +70,7 @@ export function Menu({ mode, inventory = [], onDisplayAlert = x => x, isLoading,
         );
     else
         return (
-            <div className="d-flex flex-fill flex-column container">
+            <div className="container-fluid">
                 <h1 className={ `txtJasper text-center text-${mode.txt} display-4 my-3` }>Menu</h1>
                 <div className="row">
                     <div className="col">

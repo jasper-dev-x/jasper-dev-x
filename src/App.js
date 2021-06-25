@@ -13,20 +13,22 @@ function App() {
     bg: sessionStorage.getItem('modeBg') ? sessionStorage.getItem('modeBg') : 'light',
     txt: sessionStorage.getItem('modeTxt') ? sessionStorage.getItem('modeTxt') : 'dark',
   });
+  const minHeight = `88vh`;
+  const height = window.screen.height * .72;
   useEffect(() => {
     var xApp = document.getElementById('appBody');
     xApp.classList.add('modeFade');
   }, [mode]);
 
   return (
-    <div className={ `bg-danger` } style={ { height: window.innerHeight } }>
+    <div className={ `bg-danger` } style={ { height: window.screen.height * .83564811989 } }>
       <BrowserRouter>
-        <div className={ `d-flex flex-fill flex-column bg-${mode.bg}` }>
+        <div className={ `d-flex flex-fill flex-column bg-${mode.bg} text-${mode.txt}` }>
           {/* HEADER 12% HEIGHT */ }
           <Header mode={ mode } setMode={ setMode } />
 
           {/* BODY 88% HEIGHT */ }
-          <div id="appBody" className={ `d-flex flex-fill bg-${mode.bg}` } style={ { minHeight: `88vh`, marginTop: `12vh` } }>
+          <div id="appBody" className={ `d-flex flex-fill bg-${mode.bg} text-${mode.txt}` } style={ { height, minHeight, marginTop: `12vh` } }>
             <Switch>
               <Route path="/" exact>
                 <Home mode={ mode } />

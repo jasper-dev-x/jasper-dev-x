@@ -4,10 +4,11 @@ import FormName from './FormName';
 import FormPrice from './FormPrice';
 import { deleteItem as deleteSeshItem, updateItem as updateSeshItem } from '../actions';
 import { loadInventory, deleteItem as deleteDBItem, updateItem as updateDBItem } from '../thunks';
+import { getInventory, getIsInventoryLoading } from '../selectors';
 
 const mapStateToProps = state => ({
-    inventory: state.inventory,
-    isLoading: state.inventoryIsLoading
+    inventory: getInventory(state),
+    isLoading: getIsInventoryLoading(state)
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -23,6 +24,8 @@ export function InventoryList({ mode, inventory = [], onSeshDeleteItem, onDBDele
     const [name, setName] = useState('');
     const [price, setPrice] = useState('');
     const [quantity, setQuantity] = useState('');
+    const height = window.screen.height * .72;
+    const minHeight = `88vh`;
 
     useEffect(() => {
         startLoadingInventory();
@@ -63,13 +66,13 @@ export function InventoryList({ mode, inventory = [], onSeshDeleteItem, onDBDele
 
     if (isLoading)
         return (
-            <div className="d-flex centerFlex" style={ { height: `88vh` } }>
+            <div className="d-flex centerFlex" style={ { height, minHeight } }>
                 <span className={ `display-3 txtJasper text-${mode.txt}` }>Loading...</span>
             </div>
         );
     else
         return (
-            <div style={ { height: `88vh` } }>
+            <div className="" style={ { height, minHeight } }>
                 <h1 className={ `txtJasper display-4 py-3` }>Inventory List</h1>
                 <div className="shadow">
                     {/* TABLE HEADER */ }

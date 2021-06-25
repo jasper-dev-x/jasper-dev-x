@@ -15,6 +15,8 @@ export function AccountForm({ mode, onCreateSeshAccount, onCreateDBAccount }) {
     const [name, setName] = useState('');
     const [phone, setPhone] = useState({ a: '', b: '', c: '' });
     const [email, setEmail] = useState('');
+    const height = window.screen.height * .72;
+    const minHeight = `88vh`;
 
     function addAccount() {
         const add = {
@@ -37,7 +39,7 @@ export function AccountForm({ mode, onCreateSeshAccount, onCreateDBAccount }) {
     }
 
     return (
-        <div className="container d-flex flex-column" style={ { height: `88vh` } }>
+        <div className={ `container-fluid bg-${mode.bg}` } style={ { height, minHeight } }>
             <div className="row">
                 <h1 className="text-center txtJasper display-4 my-4">Account Sign-Up</h1>
             </div>
