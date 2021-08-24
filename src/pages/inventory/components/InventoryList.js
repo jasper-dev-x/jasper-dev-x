@@ -1,50 +1,39 @@
 import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { JDXLoading } from '../../../components/JDXLoading';
+import { apiGetAllItems, apiUpdateItem, apiDeleteItem, updateItem, deleteItem, initInventory } from '../../../reduxPie/inventorySlice';
 import FormName from './FormName';
 import FormPrice from './FormPrice';
-import { deleteItem as deleteSeshItem, updateItem as updateSeshItem } from '../actions';
-import { loadInventory, deleteItem as deleteDBItem, updateItem as updateDBItem } from '../thunks';
-import { getInventory, getIsInventoryLoading } from '../selectors';
 
-const mapStateToProps = state => ({
-    inventory: getInventory(state),
-    isLoading: getIsInventoryLoading(state)
-});
-
-const mapDispatchToProps = dispatch => ({
-    onSeshDeleteItem: (id) => dispatch(deleteSeshItem(id)),
-    onDBDeleteItem: (id) => dispatch(deleteDBItem(id)),
-    onSeshUpdateItem: (item) => dispatch(updateSeshItem(item)),
-    onDBUpdateItem: (item) => dispatch(updateDBItem(item)),
-    startLoadingInventory: () => dispatch(loadInventory())
-});
-
-export function InventoryList({ mode, inventory = [], onSeshDeleteItem, onDBDeleteItem, onSeshUpdateItem, onDBUpdateItem, startLoadingInventory, isLoading }) {
+export default function InventoryList({ mode }) {
     const [oid, setOid] = useState('');
     const [name, setName] = useState('');
     const [price, setPrice] = useState('');
     const [quantity, setQuantity] = useState('');
     const height = window.screen.height * .72;
     const minHeight = `88vh`;
+    const dispatch = useDispatch();
+    const inventory = useSelector((state) => state.inventory);
 
     useEffect(() => {
-        startLoadingInventory();
-    }, [startLoadingInventory]);
+        dispatch(initInventory());
+        dispatch(apiGetAllItems());
+    }, [dispatch]);
 
     // FORM QUANTITY VALIDATION
-    useEffect(() => {
-        const formQuantity = document.getElementById("formQty");
-        if (quantity === "0") {
-            formQuantity.classList.remove("bg-warning");
-            formQuantity.classList.add("bg-danger");
-        }
-        else if (parseInt(quantity) < 10) {
-            formQuantity.classList.remove("bg-danger");
-            formQuantity.classList.add("bg-warning");
-        }
-        else
-            formQuantity.classList.remove("bg-warning", "bg-danger");
-    }, [quantity]);
+    // useEffect(() => {
+    //     const formQuantity = document.getElementById("formQty");
+    //     if (quantity === "0") {
+    //         formQuantity.classList.remove("bg-warning");
+    //         formQuantity.classList.add("bg-danger");
+    //     }
+    //     else if (parseInt(quantity) < 10) {
+    //         formQuantity.classList.remove("bg-danger");
+    //         formQuantity.classList.add("bg-warning");
+    //     }
+    //     else
+    //         formQuantity.classList.remove("bg-warning", "bg-danger");
+    // }, [quantity]);
 
     function setEditForm(item) {
         setOid(item._id.$oid);
@@ -54,25 +43,25 @@ export function InventoryList({ mode, inventory = [], onSeshDeleteItem, onDBDele
     }
 
     function onUpdateItem() {
-        const item = { oid, name, price, quantity };
-        onSeshUpdateItem(item);
-        onDBUpdateItem(item);
+        const item = { _id: oid, name, price, quantity };
+        dispatch(updateItem(item));
+        dispatch(apiUpdateItem(item));
     }
 
     function onDeleteItem() {
-        onSeshDeleteItem(oid);
-        onDBDeleteItem(oid);
+        dispatch(deleteItem({ _id: oid }));
+        dispatch(apiDeleteItem(oid));
     }
 
-    if (isLoading)
+    if (inventory.isLoading)
         return (
-            <div className="d-flex centerFlex" style={ { height, minHeight } }>
-                <span className={ `display-3 txtJasper text-${mode.txt}` }>Loading...</span>
+            <div className="d-flex centered" style={ { height, minHeight } }>
+                <JDXLoading mode={ mode } />
             </div>
         );
     else
         return (
-            <div className="" style={ { height, minHeight } }>
+            <div style={ { height, minHeight } }>
                 <h1 className={ `txtJasper display-4 py-3` }>Inventory List</h1>
                 <div className="shadow">
                     {/* TABLE HEADER */ }
@@ -91,7 +80,7 @@ export function InventoryList({ mode, inventory = [], onSeshDeleteItem, onDBDele
                     <div className="overflow-auto" style={ { height: `60vh` } } >
                         <table className="table text-center table-hover lead table-striped">
                             <tbody className="user-select-none">
-                                { inventory.map((item, key) => {
+                                { inventory.data.map((item, key) => {
                                     if (item.quantity.$numberInt === "0")
                                         return (
                                             <tr key={ key } onClick={ () => setEditForm(item) } data-bs-toggle="modal" data-bs-target="#editPopup" className="table-danger">
@@ -140,6 +129,8 @@ export function InventoryList({ mode, inventory = [], onSeshDeleteItem, onDBDele
                                             <button className="btn btn-outline-danger rounded" onClick={ () => setQuantity(quantity <= 0 ? "0" : (parseInt(quantity) - 1).toString()) }>-</button>
                                         </div>
                                     </div>
+
+                                    {/* BUTTON GROUP */ }
                                     <div className="modal-body">
                                         <div className="d-flex">
                                             <div className="col d-grid">
@@ -159,5 +150,3 @@ export function InventoryList({ mode, inventory = [], onSeshDeleteItem, onDBDele
             </div>
         );
 }
-
-export default connect(mapStateToProps, mapDispatchToProps)(InventoryList);

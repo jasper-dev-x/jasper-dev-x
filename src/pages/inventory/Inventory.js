@@ -1,9 +1,8 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import InventoryForm from './components/InventoryForm';
 import InventoryList from './components/InventoryList';
 
-export function InventoryPage({ mode }) {
+export default function InventoryPage({ mode }) {
     return (
         <div className={ `d-flex flex-fill text-center text-${mode.txt}` }>
             <div className="container">
@@ -18,4 +17,3 @@ export function InventoryPage({ mode }) {
     );
 }
 
-export default connect()(InventoryPage);

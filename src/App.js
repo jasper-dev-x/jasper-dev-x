@@ -1,34 +1,35 @@
 import './App.css';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import Header from './components/Header';
-import Home from './pages/home';
-import Menu from './pages/menu';
+import Home from './pages/home/Home';
+import Menu from './pages/menu/Menu';
 import NotFound from './pages/NotFound';
-import AccountPage from './pages/accounts';
-import InventoryPage from './pages/inventory';
+import AccountPage from './pages/accounts/Accounts';
+import InventoryPage from './pages/inventory/Inventory';
+import Cart from './pages/cart/Cart';
 
 function App() {
   const [mode, setMode] = useState({
     bg: sessionStorage.getItem('modeBg') ? sessionStorage.getItem('modeBg') : 'light',
     txt: sessionStorage.getItem('modeTxt') ? sessionStorage.getItem('modeTxt') : 'dark',
   });
-  const minHeight = `88vh`;
-  const height = window.screen.height * .72;
-  useEffect(() => {
-    var xApp = document.getElementById('appBody');
-    xApp.classList.add('modeFade');
-  }, [mode]);
+  const minHeight = (window.innerHeight - 1) * .88;
+  const marginTop = (window.innerHeight - 1) * .12;
+  // useEffect(() => {
+  //   var xApp = document.getElementById('appBody');
+  //   xApp.classList.add('modeFade');
+  // }, [mode]);
 
   return (
-    <div className={ `bg-danger` } style={ { height: window.screen.height * .83564811989 } }>
+    <div className={ `bg-info` } style={ { height: window.innerHeight - 1 } }>
       <BrowserRouter>
         <div className={ `d-flex flex-fill flex-column bg-${mode.bg} text-${mode.txt}` }>
           {/* HEADER 12% HEIGHT */ }
           <Header mode={ mode } setMode={ setMode } />
 
           {/* BODY 88% HEIGHT */ }
-          <div id="appBody" className={ `d-flex flex-fill bg-${mode.bg} text-${mode.txt}` } style={ { height, minHeight, marginTop: `12vh` } }>
+          <div className={ `d-flex flex-fill bg-${mode.bg} text-${mode.txt}` } style={ { minHeight, marginTop } }>
             <Switch>
               <Route path="/" exact>
                 <Home mode={ mode } />
@@ -41,6 +42,9 @@ function App() {
               </Route>
               <Route path="/menu">
                 <Menu mode={ mode } />
+              </Route>
+              <Route path="/cart">
+                <Cart mode={ mode } />
               </Route>
               <Route>
                 <NotFound />

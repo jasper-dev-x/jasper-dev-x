@@ -1,88 +1,67 @@
-import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
-import { deleteAccount as deleteSeshAccount, updateAccount as updateSeshAccount } from '../actions';
-import { loadAccounts, deleteAccount as deleteDBAccount, updateAccount as updateDBAccount } from '../thunks';
+import React, { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { apiGetAllAccounts, apiUpdateAccount, updateAccount, apiDeleteAccount, deleteAccount, initAccounts } from '../../../reduxPie/accountSlice';
 import FormName from './FormName';
 import FormEmail from './FormEmail';
 import FormPhone from './FormPhone';
+import { JDXLoading } from '../../../components/JDXLoading';
 
-const mapStateToProps = state => ({
-    accounts: state.accounts,
-    isLoading: state.accountsAreLoading
-});
-
-const mapDispatchToProps = dispatch => ({
-    onSeshDeleteAccount: (id) => dispatch(deleteSeshAccount(id)),
-    onDBDeleteAccount: (id) => dispatch(deleteDBAccount(id)),
-    onSeshUpdateAccount: (account) => dispatch(updateSeshAccount(account)),
-    onDBUpdateAccount: (account) => dispatch(updateDBAccount(account)),
-    startLoadingAccounts: () => dispatch(loadAccounts())
-});
-
-export function AccountList({ mode, accounts = [], isLoading, onSeshDeleteAccount, onDBDeleteAccount, onSeshUpdateAccount, onDBUpdateAccount, startLoadingAccounts }) {
-    // eslint-disable-next-line
+export default function AccountList({ mode }) {
     const [oid, setOid] = useState('');
-    // eslint-disable-next-line
     const [name, setName] = useState('');
-    // eslint-disable-next-line
     const [phone, setPhone] = useState({ a: '', b: '', c: '' });
-    // eslint-disable-next-line
     const [email, setEmail] = useState('');
     const height = window.screen.height * .72;
     const minHeight = `88vh`;
+    const accounts = useSelector((state) => state.accounts);
+    const dispatch = useDispatch();
 
     useEffect(() => {
-        startLoadingAccounts();
-    }, [startLoadingAccounts]);
+        dispatch(initAccounts());
+        dispatch(apiGetAllAccounts());
+    }, [dispatch]);
 
     function setEditAccount({ _id, name, email, phone }) {
         setOid(_id.$oid ? _id.$oid : "reload");
-        setName(name);
-        setPhone({
+        setName(name ? name : '');
+        setPhone(phone ? {
             a: phone.$numberLong.slice(0, 3),
             b: phone.$numberLong.slice(3, 6),
             c: phone.$numberLong.slice(6)
-        });
-        setEmail(email);
+        } : '0000000000');
+        setEmail(email ? email : '');
     }
 
-    function onDeleteAccount(id) {
-        try {
-            if (id !== "reload") {
-                onSeshDeleteAccount(id);
-                onDBDeleteAccount(id);
-            }
-        } catch (err) {
-            console.error("ERROR ON DELETE ACCOUNT AccountList.js: ", err);
-        }
-    }
-
-    function onUpdateAccount() {
+    const onUpdateAccount = () => {
         const account = {
-            oid,
+            _id: oid,
             name,
             email,
             phone: phone.a + phone.b + phone.c
         };
-        try {
-            onSeshUpdateAccount(account);
-            onDBUpdateAccount(account);
-        } catch (err) {
-            console.error("ERROR ON UPDATE ACCOUNT AccountList.js: ", err);
-        }
-    }
+        dispatch(updateAccount(account));
+        dispatch(apiUpdateAccount(account));
+    };
 
-    if (isLoading)
-        return <div className="d-flex flex-fill centerFlex" style={ { minHeight, height } }>
-            <span className={ `display-3 txtJasper text-${mode.txt}` }>Loading...</span>
-        </div>;
+    const onDeleteAccount = (_id) => {
+        dispatch(apiDeleteAccount({ _id }));
+        dispatch(deleteAccount({ _id }));
+    };
+
+    if (accounts.isLoading)
+        return (
+            <div className="d-flex flex-fill centered" style={ { minHeight, height } }>
+                <JDXLoading mode={ mode } />
+            </div>
+        );
     else
         return (
             <div className="container" style={ { height, minHeight } }>
-                <h1 className="text-center txtJasper display-4 my-4">Account List</h1>
+                <h1 id="topOfScreen" className="text-center txtJasper display-4 my-4">Account List</h1>
                 <div id="accountList" className="accordion overflow-auto px-2 pb-3 bgRed shadow rounded" style={ { height: `60vh` } }>
+
                     {/* ACCOUNT LIST */ }
-                    { accounts.map((item, key) => (
+                    { accounts.data.map((item, key) => (
                         <div key={ key } className="accordion-item bgRed mx-3 mt-3">
                             {/* ACCORDION BUTTON */ }
                             <div className="accordion-header d-grid rounded">
@@ -97,36 +76,10 @@ export function AccountList({ mode, accounts = [], isLoading, onSeshDeleteAccoun
                                 <div className="accordion-body">
                                     <div className="d-grid flex-fill">
                                         {/* VIEW DETAILS BUTTON */ }
-                                        <button className={ `btn btn-${mode.txt} mb-3` } onClick={ () => setEditAccount(item) } data-bs-toggle="modal" data-bs-target={ `#editAccountPopup${key}` } data-bs-keyboard="false">View { item.name }'s Details</button>
+                                        <button className={ `btn btn-${mode.txt} mb-3` } onClick={ () => setEditAccount(item) } data-bs-toggle="modal" data-bs-target={ `#editAccountPopup${key}` } data-bs-keyboard="false">View Details</button>
 
                                         {/* DELETE BUTTON */ }
-                                        <button className="btn btn-secondary" onClick={ () => setEditAccount(item) } data-bs-toggle="modal" data-bs-target={ `#deleteAccountPopup${key}` }>Delete { item.name }'s Account</button>
-
-                                        {/* DELETE POP-UP */ }
-                                        <div id={ `deleteAccountPopup${key}` } className="modal fade" data-bs-backdrop="static">
-                                            <div className="modal-dialog modal-dialog-centered">
-                                                <div className={ `modal-content bg-${mode.bg} text-center` }>
-                                                    <div className="modal-body">
-                                                        <h1 className={ `display-5 text-${mode.txt}` }>Are you sure?</h1>
-                                                    </div>
-                                                    <div className="modal-body lead fw-bold text-danger">
-                                                        <p>This is a *PERMANENT* account removal of:</p>
-                                                        <p className="display-6">{ name }</p>
-                                                    </div>
-                                                    <div className="modal-body">
-                                                        <div className="d-flex flex-fill">
-                                                            <div className="col d-grid">
-                                                                <button className="btn btn-danger" data-bs-dismiss="modal" onClick={ () => onDeleteAccount(oid) }>Delete</button>
-                                                            </div>
-                                                            <div className="col-1" />
-                                                            <div className="col d-grid">
-                                                                <button className={ `btn btn-${mode.txt}` } data-bs-dismiss="modal">Cancel</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <button className="btn btn-secondary" onClick={ () => setEditAccount(item) } data-bs-toggle="modal" data-bs-target={ `#deleteAccountPopup${key}` }>Delete Account</button>
 
                                         {/* VIEW DETAILS POP-UP */ }
                                         <div id={ `editAccountPopup${key}` } className="modal fade" data-bs-backdrop="static">
@@ -149,6 +102,32 @@ export function AccountList({ mode, accounts = [], isLoading, onSeshDeleteAccoun
                                                 </div>
                                             </div>
                                         </div>
+
+                                        {/* DELETE POP-UP */ }
+                                        <div id={ `deleteAccountPopup${key}` } className="modal fade" data-bs-backdrop="static">
+                                            <div className="modal-dialog modal-dialog-centered">
+                                                <div className={ `modal-content bg-${mode.bg} text-center` }>
+                                                    <div className="modal-body">
+                                                        <h1 className={ `display-5 text-${mode.txt}` }>Are you sure?</h1>
+                                                    </div>
+                                                    <div className="modal-body lead fw-bold text-danger">
+                                                        <p>This is a *PERMANENT* account removal of:</p>
+                                                        <p className="display-6">{ name }</p>
+                                                    </div>
+                                                    <div className="modal-body">
+                                                        <div className="d-flex flex-fill">
+                                                            <div className="col d-grid">
+                                                                <button className="btn btn-danger" data-bs-dismiss="modal" onClick={ () => onDeleteAccount(item._id) }>Delete</button>
+                                                            </div>
+                                                            <div className="col-1" />
+                                                            <div className="col d-grid">
+                                                                <button className={ `btn btn-${mode.txt}` } data-bs-dismiss="modal">Cancel</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -157,6 +136,4 @@ export function AccountList({ mode, accounts = [], isLoading, onSeshDeleteAccoun
                 </div>
             </div >
         );
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(AccountList);
+};

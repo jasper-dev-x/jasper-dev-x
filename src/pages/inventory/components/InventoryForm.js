@@ -1,34 +1,25 @@
 import React, { useState } from 'react';
-import { connect } from 'react-redux';
-import { createItem as createSeshItem } from '../actions';
-import { createItem as createDBItem } from '../thunks';
+import { useDispatch } from 'react-redux';
+import { createItem, apiCreateItem } from '../../../reduxPie/inventorySlice';
 import FormName from './FormName';
 import FormPrice from './FormPrice';
 import FormQuantity from './FormQuantity';
 
-const mapDispatchToProps = dispatch => ({
-    onCreateSeshItem: (item) => dispatch(createSeshItem(item)),
-    onCreateDBItem: (item) => dispatch(createDBItem(item))
-});
-
-export function InventoryForm({ mode, onCreateDBItem, onCreateSeshItem }) {
+export default function InventoryForm({ mode }) {
     const [name, setName] = useState('');
     const [price, setPrice] = useState('');
     const [quantity, setQuantity] = useState('');
     const height = window.screen.height * .72;
     const minHeight = `88vh`;
+    const dispatch = useDispatch();
 
     function addItem() {
-        const item = {
-            name,
-            price,
-            quantity
-        };
+        const item = { name, price, quantity };
         try {
             if (name === '' || price === '' || quantity === '')
                 return;
-            onCreateDBItem(item);
-            onCreateSeshItem(item);
+            dispatch(createItem(item));
+            dispatch(apiCreateItem(item));
             setName('');
             setPrice(0);
             setQuantity(0);
@@ -50,5 +41,3 @@ export function InventoryForm({ mode, onCreateDBItem, onCreateSeshItem }) {
         </form>
     );
 }
-
-export default connect(null, mapDispatchToProps)(InventoryForm);

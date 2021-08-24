@@ -1,9 +1,8 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import AccountForm from './components/AccountForm';
 import AccountList from './components/AccountList';
 
-export function Accounts({ mode }) {
+export default function Accounts({ mode }) {
     return (
         <div className={ `d-flex flex-fill flex-column bg-${mode.bg} text-${mode.txt}` } >
             <AccountList mode={ mode } />
@@ -11,5 +10,3 @@ export function Accounts({ mode }) {
         </div>
     );
 }
-
-export default connect()(Accounts);

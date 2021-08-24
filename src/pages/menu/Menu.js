@@ -1,42 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
-import { displayAlert, loadInventory } from '../inventory/thunks';
+import { useSelector, useDispatch } from 'react-redux';
 import { MenuForm } from './components/MenuForm';
-import { MenuList } from './components/MenuList';
-import { getInventory, getIsInventoryLoading } from '../inventory/selectors';
+import { apiGetAllItems } from '../../reduxPie/inventorySlice';
+import MenuList from './components/MenuList';
 
-const mapStateToProps = state => ({
-    inventory: getInventory(state),
-    isLoading: getIsInventoryLoading(state),
-});
-
-const mapDispatchToProps = dispatch => ({
-    onDisplayAlert: (msg) => dispatch(displayAlert(msg)),
-    startLoadingInventory: () => dispatch(loadInventory())
-});
-
-export function Menu({ mode, inventory = [], isLoading, startLoadingInventory = x => x }) {
-    const [menu, setMenu] = useState(inventory);
+export default function Menu({ mode }) {
+    const dispatch = useDispatch();
+    const inventory = useSelector(state => state.inventory);
+    const [menu, setMenu] = useState(inventory.data);
     const [sort, setSort] = useState("0");
     const [search, setSearch] = useState("");
 
     useEffect(() => {
-        startLoadingInventory();
-    }, [startLoadingInventory]);
+        dispatch(apiGetAllItems());
+    }, [dispatch]);
 
     useEffect(() => {
-        setMenu(inventory.filter((x) => x.name.toLowerCase().match(search.toLowerCase())));
+        setMenu(inventory.data.filter((x) => x.name.toLowerCase().match(search.toLowerCase())));
     }, [search, inventory]);
 
     function sortMenu(num) {
         switch (num) {
-            // HI -> LO
+            // PRICE HI -> LO
             case "1": {
                 setMenu(menu.sort((a, b) => b.price.$numberInt - a.price.$numberInt));
                 document.getElementById("menu").scrollTo(0, 0);
                 break;
             }
-            // LO -> HI
+            // PRICE LO -> HI
             case "2": {
                 setMenu(menu.sort((a, b) => a.price.$numberInt - b.price.$numberInt));
                 document.getElementById("menu").scrollTo(0, 0);
@@ -55,16 +46,16 @@ export function Menu({ mode, inventory = [], isLoading, startLoadingInventory = 
                 break;
             }
             default: {
-                setMenu(inventory);
+                setMenu(inventory.data);
                 document.getElementById("menu").scrollTo(0, 0);
                 break;
             }
         }
     }
 
-    if (isLoading)
+    if (inventory.isLoading)
         return (
-            <div className="d-flex flex-fill centerFlex" style={ { height: `88vh` } }>
+            <div className="d-flex flex-fill centered" style={ { height: `88vh` } }>
                 <span className={ `display-3 txtJasper text-${mode.txt}` }>Loading...</span>
             </div>
         );
@@ -83,5 +74,3 @@ export function Menu({ mode, inventory = [], isLoading, startLoadingInventory = 
             </div>
         );
 };
-
-export default connect(mapStateToProps, mapDispatchToProps)(Menu);
