@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { createItem, apiCreateItem } from '../../../reduxPie/inventorySlice';
-import FormName from './FormName';
-import FormPrice from './FormPrice';
-import FormQuantity from './FormQuantity';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { createItem, apiCreateItem } from '../../reduxPie/inventorySlice';
+import FormName from './components/FormName';
+import FormPrice from './components/FormPrice';
+import FormQuantity from './components/FormQuantity';
 
-export default function InventoryForm({ mode }) {
+export default function InventoryForm() {
+    const mode = useSelector(state => state.mode);
     const [name, setName] = useState('');
     const [price, setPrice] = useState('');
     const [quantity, setQuantity] = useState('');
@@ -30,14 +32,17 @@ export default function InventoryForm({ mode }) {
     }
 
     return (
-        <form className={ `container bg-${mode.bg}` } style={ { minHeight, height } }>
-            <h1 className={ `txtJasper display-4 py-3` }>Inventory Form</h1>
+        <div className="container" style={ { minHeight, height } }>
+            <h1 className="txtJasper display-4 py-3">Add To Inventory</h1>
             <FormName name={ name } setName={ setName } />
             <FormPrice mode={ mode } price={ price } setPrice={ setPrice } />
             <FormQuantity quantity={ quantity } setQuantity={ setQuantity } />
-            <div className="d-grid">
+            <div className="d-grid mb-5">
                 <button type="submit" className={ `btn btn-${mode.txt}` } onClick={ () => addItem() }>Add Item</button>
             </div>
-        </form>
+            <Link to="/inventory" className="d-grid">
+                <button className={ `btn btn-${mode.bg}` }>Go Back</button>
+            </Link>
+        </div>
     );
 }

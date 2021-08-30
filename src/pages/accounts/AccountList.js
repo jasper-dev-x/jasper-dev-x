@@ -1,20 +1,22 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { apiGetAllAccounts, apiUpdateAccount, updateAccount, apiDeleteAccount, deleteAccount, initAccounts } from '../../../reduxPie/accountSlice';
-import FormName from './FormName';
-import FormEmail from './FormEmail';
-import FormPhone from './FormPhone';
-import { JDXLoading } from '../../../components/JDXLoading';
+import { apiGetAllAccounts, apiUpdateAccount, updateAccount, apiDeleteAccount, deleteAccount, initAccounts } from '../../reduxPie/accountSlice';
+import FormName from './components/FormName';
+import FormEmail from './components/FormEmail';
+import FormPhone from './components/FormPhone';
 
-export default function AccountList({ mode }) {
+export default function AccountList() {
+    const mode = useSelector(state => state.mode);
+    const accounts = useSelector((state) => state.accounts);
+    const dispatch = useDispatch();
     const [oid, setOid] = useState('');
     const [name, setName] = useState('');
     const [phone, setPhone] = useState({ a: '', b: '', c: '' });
     const [email, setEmail] = useState('');
-    const height = window.screen.height * .72;
     const minHeight = `88vh`;
-    const accounts = useSelector((state) => state.accounts);
-    const dispatch = useDispatch();
+    const XY = 30;
+    const fill = () => mode.bg === 'light' ? 'black' : 'white';
 
     useEffect(() => {
         dispatch(initAccounts());
@@ -50,14 +52,22 @@ export default function AccountList({ mode }) {
 
     if (accounts.isLoading)
         return (
-            <div className="d-flex flex-fill centered" style={ { minHeight, height } }>
-                <JDXLoading mode={ mode } />
+            <div className="d-flex flex-fill centered" style={ { minHeight } }>
+                <h1 className={ `display-6 text-${mode.txt} txtJasper` }>Loading...</h1>
             </div>
         );
     else
         return (
-            <div className="container" style={ { height, minHeight } }>
-                <h1 id="topOfScreen" className="text-center txtJasper display-4 my-4">Account List</h1>
+            <div className="container" style={ { minHeight } }>
+                <div className="d-flex centered w-100 p-4">
+                    <h1 id="topOfScreen" className="txtJasper display-4 flex-grow-1">Accounts</h1>
+                    <Link to="/accounts/create">
+                        <svg xmlns="http://www.w3.org/2000/svg" width={ XY } height={ XY } fill={ fill() } className="bi bi-person-plus" viewBox="0 0 16 16">
+                            <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
+                            <path fillRule="evenodd" d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z" />
+                        </svg>
+                    </Link>
+                </div>
                 <div id="accountList" className="accordion overflow-auto px-2 pb-3 bgRed shadow rounded" style={ { height: `60vh` } }>
 
                     {/* ACCOUNT LIST */ }

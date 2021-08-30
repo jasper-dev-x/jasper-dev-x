@@ -4,19 +4,23 @@ import { MenuForm } from './components/MenuForm';
 import { apiGetAllItems } from '../../reduxPie/inventorySlice';
 import MenuList from './components/MenuList';
 
-export default function Menu({ mode }) {
+export default function Menu() {
     const dispatch = useDispatch();
+    const mode = useSelector(state => state.mode);
     const inventory = useSelector(state => state.inventory);
-    const [menu, setMenu] = useState(inventory.data);
+    const [menu, setMenu] = useState(inventory.data.filter((x) => x.quantity.$numberInt !== "0"));
     const [sort, setSort] = useState("0");
     const [search, setSearch] = useState("");
+    const minHeight = `88vh`;
 
     useEffect(() => {
         dispatch(apiGetAllItems());
     }, [dispatch]);
 
     useEffect(() => {
-        setMenu(inventory.data.filter((x) => x.name.toLowerCase().match(search.toLowerCase())));
+        setMenu(inventory.data
+            .filter((x) => x.quantity.$numberInt !== "0")
+            .filter((x) => x.name.toLowerCase().match(search.toLowerCase())));
     }, [search, inventory]);
 
     function sortMenu(num) {
@@ -55,16 +59,16 @@ export default function Menu({ mode }) {
 
     if (inventory.isLoading)
         return (
-            <div className="d-flex flex-fill centered" style={ { height: `88vh` } }>
+            <div className="d-flex flex-fill centered" style={ { minHeight } }>
                 <span className={ `display-3 txtJasper text-${mode.txt}` }>Loading...</span>
             </div>
         );
     else
         return (
-            <div className="container-fluid">
-                <h1 className={ `txtJasper text-center text-${mode.txt} display-4 my-3` }>Menu</h1>
-                <div className="row">
+            <div className="d-flex flex-fill container-fluid">
+                <div className="d-flex flex-fill row">
                     <div className="col">
+                        <h1 className={ `txtJasper text-center text-${mode.txt} display-4 my-3` }>Menu</h1>
                         <MenuForm mode={ mode } search={ search } setSearch={ setSearch } sort={ sort } setSort={ setSort } sortMenu={ sortMenu } />
                     </div>
                     <div className="col-md-9">

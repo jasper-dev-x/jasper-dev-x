@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import darkJ from '../images/darkJ.png';
 import darkD from '../images/darkD.png';
 import darkX from '../images/darkX.png';
@@ -6,7 +7,8 @@ import lightJ from '../images/lightJ.png';
 import lightD from '../images/lightD.png';
 import lightX from '../images/lightX.png';
 
-export function JDXLoading({ mode }) {
+export function JDXLoading() {
+    const mode = useSelector(state => state.mode);
     const XY = window.innerHeight > window.innerWidth * 1.25 ? window.innerWidth / 2 : window.innerHeight * .75 / 2;
     const height = XY;
     const width = XY;

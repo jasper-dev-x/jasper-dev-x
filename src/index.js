@@ -14,6 +14,12 @@ const persistor = persistStore(reduxStore);
 // // Forces every refresh to wipe data then instantly write over it
 // persistor.purge();
 
+if (localStorage.getItem('lastPurge') != new Date().getDate()) {
+  localStorage.setItem('lastPurge', new Date().getDate());
+  persistor.purge();
+}
+
+
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={ reduxStore }>

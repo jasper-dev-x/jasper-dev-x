@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
 export default function FormEmail({ count = "", email, setEmail }) {
+    const mode = useSelector(state => state.mode);
 
     // EMAIL VALIDATION
     useEffect(() => {
@@ -17,8 +19,8 @@ export default function FormEmail({ count = "", email, setEmail }) {
 
     return (
         <div className="form-floating mb-3">
-            <input id={ `formEmail${count}` } type="text" className="form-control" placeholder="Avg.Joe@your.com" value={ email } onChange={ (x) => setEmail(x.target.value) } required />
-            <label htmlFor={ `formEmail${count}` } className="txtRed">Email</label>
+            <input id={ `formEmail${count}` } type="text" className={ `form-control bg-${mode.bg} text-${mode.txt}` } placeholder="Avg.Joe@your.com" value={ email } onChange={ (x) => setEmail(x.target.value) } required />
+            <label htmlFor={ `formEmail${count}` } className={ `text-${mode.txt}` }>Email</label>
         </div>
     );
 }

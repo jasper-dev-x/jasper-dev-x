@@ -1,19 +1,19 @@
 import './App.css';
-import React, { useState } from 'react';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Home from './pages/home/Home';
 import Menu from './pages/menu/Menu';
 import NotFound from './pages/NotFound';
-import AccountPage from './pages/accounts/Accounts';
-import InventoryPage from './pages/inventory/Inventory';
+import InventoryList from './pages/inventory/InventoryList';
+import InventoryForm from './pages/inventory/InventoryForm';
 import Cart from './pages/cart/Cart';
+import AccountForm from './pages/accounts/AccountForm';
+import AccountList from './pages/accounts/AccountList';
 
 function App() {
-  const [mode, setMode] = useState({
-    bg: sessionStorage.getItem('modeBg') ? sessionStorage.getItem('modeBg') : 'light',
-    txt: sessionStorage.getItem('modeTxt') ? sessionStorage.getItem('modeTxt') : 'dark',
-  });
+  const mode = useSelector(state => state.mode);
   const minHeight = (window.innerHeight - 1) * .88;
   const marginTop = (window.innerHeight - 1) * .12;
   // useEffect(() => {
@@ -22,29 +22,35 @@ function App() {
   // }, [mode]);
 
   return (
-    <div className={ `bg-info` } style={ { height: window.innerHeight - 1 } }>
+    <div className={ `bg-${mode.bg}` } style={ { height: window.innerHeight - 1 } }>
       <BrowserRouter>
         <div className={ `d-flex flex-fill flex-column bg-${mode.bg} text-${mode.txt}` }>
           {/* HEADER 12% HEIGHT */ }
-          <Header mode={ mode } setMode={ setMode } />
+          <Header />
 
           {/* BODY 88% HEIGHT */ }
           <div className={ `d-flex flex-fill bg-${mode.bg} text-${mode.txt}` } style={ { minHeight, marginTop } }>
             <Switch>
               <Route path="/" exact>
-                <Home mode={ mode } />
+                <Home />
               </Route>
-              <Route path="/accounts">
-                <AccountPage mode={ mode } />
+              <Route path="/accounts" exact>
+                <AccountList />
               </Route>
-              <Route path="/inventory">
-                <InventoryPage mode={ mode } />
+              <Route path="/accounts/create">
+                <AccountForm />
+              </Route>
+              <Route path="/inventory" exact>
+                <InventoryList />
+              </Route>
+              <Route path="/inventory/create">
+                <InventoryForm />
               </Route>
               <Route path="/menu">
-                <Menu mode={ mode } />
+                <Menu />
               </Route>
               <Route path="/cart">
-                <Cart mode={ mode } />
+                <Cart />
               </Route>
               <Route>
                 <NotFound />

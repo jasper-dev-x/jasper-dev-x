@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
 export default function FormPhone({ count = "", phone, setPhone }) {
+    const mode = useSelector(state => state.mode);
     const fontSize = 24;
 
     // PHONE VALIDATION
@@ -33,7 +35,7 @@ export default function FormPhone({ count = "", phone, setPhone }) {
     return (
         <div className="input-group mb-3 pe-2">
             <span className={ `d-flex align-items-center pe-2` } style={ { fontSize } }>(</span>
-            <input id={ `formPhone${count}1` } type="number" className="form-control txtRed rounded text-center border-2" value={ phone.a } onChange={ (x) => {
+            <input id={ `formPhone${count}1` } type="number" className={ `form-control rounded text-center border-2 bg-${mode.bg} text-${mode.txt}` } value={ phone.a } onChange={ (x) => {
                 if (x.target.value.length < 3)
                     setPhone({ a: x.target.value, b: phone.b, c: phone.c });
                 else if (x.target.value.length === 3) {
@@ -42,7 +44,7 @@ export default function FormPhone({ count = "", phone, setPhone }) {
                 }
             } } required />
             <span className={ `d-flex align-items-center px-2` } style={ { fontSize } }>) -</span>
-            <input id={ `formPhone${count}2` } type="number" className="form-control txtRed rounded text-center border-2" value={ phone.b } onChange={ (x) => {
+            <input id={ `formPhone${count}2` } type="number" className={ `form-control rounded text-center border-2 bg-${mode.bg} text-${mode.txt}` } value={ phone.b } onChange={ (x) => {
                 if (x.target.value.length < 3)
                     setPhone({ a: phone.a, b: x.target.value, c: phone.c });
                 else if (x.target.value.length === 3) {
@@ -52,7 +54,7 @@ export default function FormPhone({ count = "", phone, setPhone }) {
             } } required />
             <span className={ `d-flex align-items-center px-2` } style={ { fontSize } }>-</span>
 
-            <input id={ `formPhone${count}3` } type="number" className="form-control txtRed rounded text-center border-2" value={ phone.c } onChange={ (x) => {
+            <input id={ `formPhone${count}3` } type="number" className={ `form-control rounded text-center border-2 bg-${mode.bg} text-${mode.txt}` } value={ phone.c } onChange={ (x) => {
                 if (x.target.value.length < 4)
                     setPhone({ a: phone.a, b: phone.b, c: x.target.value });
                 else if (x.target.value.length === 4) {

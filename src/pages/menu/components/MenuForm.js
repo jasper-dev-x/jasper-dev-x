@@ -1,7 +1,9 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 
-export function MenuForm({ mode, sort, setSort, search, setSearch, sortMenu }) {
-
+export function MenuForm({ sort, setSort, search, setSearch, sortMenu }) {
+    const mode = useSelector(state => state.mode);
+    
     return (
         <>
             {/* SEARCH */ }

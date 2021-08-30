@@ -13,17 +13,20 @@ import { combineReducers } from 'redux';
 import accountReducer from "./reduxPie/accountSlice";
 import cartReducer from './reduxPie/cartSlice';
 import inventoryReducer from './reduxPie/inventorySlice';
+import modeSlice from './reduxPie/modeSlice';
 
 const persistConfig = {
     key: 'root',
     version: 1,
-    storage
+    storage,
+    whitelist: ['cart', 'mode']
 };
 
 const rootReducer = combineReducers({
     accounts: accountReducer,
     cart: cartReducer,
-    inventory: inventoryReducer
+    inventory: inventoryReducer,
+    mode: modeSlice
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

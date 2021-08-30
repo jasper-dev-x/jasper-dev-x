@@ -7,12 +7,12 @@ const initialState = {
 
 // ----- API GET ALL
 export const apiGetAllAccounts = createAsyncThunk('accounts/apiGetAllAccounts', async () => {
-    var x;
+    var loopBack;
     const accounts = await fetch("https://us-east-1.aws.webhooks.mongodb-realm.com/api/client/v2.0/app/jasperdevx-daptd/service/accounts/incoming_webhook/getAccounts")
         .then(res => res.json())
-        .then(y => x = y)
+        .then(res => loopBack = res)
         .catch((err) => console.error("ERROR API GET ALL ACCOUNTS: ", err));
-    return accounts ? accounts : x;
+    return accounts ? accounts : loopBack;
 });
 
 // ----- API CREATE
@@ -25,12 +25,12 @@ export const apiCreateAccount = createAsyncThunk('accounts/apiCreateAccount', as
             phone: { $numberLong: phone }
         })
     };
-    var x;
+    var loopBack;
     const newId = await fetch("https://us-east-1.aws.webhooks.mongodb-realm.com/api/client/v2.0/app/jasperdevx-daptd/service/accounts/incoming_webhook/createAccount", requestOptions)
         .then(res => res.json())
-        .then(y => x = y)
+        .then(res => loopBack = res)
         .catch((err) => console.error("ERROR API CREATE ACCOUNT: ", err));
-    return x;
+    return newId ? newId : loopBack;
 });
 
 // ----- API UPDATE

@@ -24,33 +24,40 @@ const cartSlice = createSlice({
         },
         minusOne(state, action) {
             const { _id } = action.payload;
+            var newAddedIds = [];
+            var newQtybyId = {};
             if (state.quantityById[`${_id}`] === 1) {
-                var qtyById = {};
+                // tempCart => [[key, val],[key, val],...]
                 let tempCart = Object.entries(state.quantityById);
-                for (var x = 0;x < tempCart.length;x += 2) {
-                    let key = tempCart[x];
-                    let value = tempCart[++x];
-                    if (key !== _id) {
-                        qtyById[`${key}`] = value;
+                for (var x = 0;x < tempCart.length;x++) {
+                    let key = tempCart[x][0];
+                    let value = tempCart[x][1];
+                    if (key !== _id && key) {
+                        newAddedIds.push(key);
+                        newQtybyId[`${key}`] = value;
                     }
                 }
-                state.quantityById = { ...qtyById };
+                state.addedIds = newAddedIds;
+                state.quantityById = newQtybyId;
             } else {
                 state.quantityById[`${_id}`]--;
             }
         },
         removeAllFromCart(state, action) {
             const { _id } = action.payload;
-            var qtyById = {};
+            var newAddedIds = [];
+            var newQtybyId = {};
             let tempCart = Object.entries(state.quantityById);
-            for (var x = 0;x < tempCart.length;x += 2) {
-                let key = tempCart[x];
-                let value = tempCart[++x];
-                if (key !== _id) {
-                    qtyById[`${key}`] = value;
+            for (var x = 0;x < tempCart.length;x++) {
+                let key = tempCart[x][0];
+                let value = tempCart[x][1];
+                if (key !== _id && key) {
+                    newAddedIds.push(key);
+                    newQtybyId[`${key}`] = value;
                 }
             }
-            state.quantityById = { ...qtyById };
+            state.addedIds = newAddedIds;
+            state.quantityById = newQtybyId;
         },
         checkout(state, action) {
             return initialState;
