@@ -4,6 +4,7 @@ import { checkout } from '../../reduxPie/cartSlice';
 import CartBody from './components/CartBody';
 
 export default function Cart() {
+    const borderRadius = 20;
     const dispatch = useDispatch();
     const mode = useSelector(state => state.mode);
     const inventory = useSelector(state => state.inventory);
@@ -21,7 +22,7 @@ export default function Cart() {
     return (
         <div className={ `d-flex flex-fill centered py-5` }>
             <div className="container">
-                <div className={ `d-flex card shadow border-${mode.txt} mb-3` } style={ { borderRadius: 20 } }>
+                <div className={ `d-flex card shadow border-${mode.txt} mb-3` } style={ { borderRadius } }>
                     <div className="d-flex myCard-header">
                         <h1 className="txtJasper">Cart</h1>
                     </div>
