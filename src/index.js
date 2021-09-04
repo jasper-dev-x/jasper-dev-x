@@ -14,6 +14,7 @@ const persistor = persistStore(reduxStore);
 // // Forces every refresh to wipe data then instantly write over it
 // persistor.purge();
 
+// eslint-disable-next-line eqeqeq
 if (localStorage.getItem('lastPurge') != new Date().getDate()) {
   localStorage.setItem('lastPurge', new Date().getDate());
   persistor.purge();
@@ -23,7 +24,7 @@ if (localStorage.getItem('lastPurge') != new Date().getDate()) {
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={ reduxStore }>
-      <PersistGate loading={ <div>Loading...</div> } persistor={ persistor }>
+      <PersistGate loading={ <div className="d-flex flex-fill centered">Loading...</div> } persistor={ persistor }>
         <App />
       </PersistGate>
     </Provider>
