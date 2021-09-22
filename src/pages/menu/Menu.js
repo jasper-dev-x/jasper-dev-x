@@ -65,13 +65,13 @@ export default function Menu() {
         );
     else
         return (
-            <div className="d-flex flex-fill container-fluid">
+            <div className="d-flex flex-fill container-fluid" style={ { height: `88vh` } }>
                 <div className="d-flex flex-fill row">
                     <div className="col">
-                        <h1 className={ `txtJasper text-center text-${mode.txt} display-4 my-3` }>Menu</h1>
+                        <h1 className={ `txtJasper text-center text-${mode.txt} display-4 my-2` }>Menu</h1>
                         <MenuForm mode={ mode } search={ search } setSearch={ setSearch } sort={ sort } setSort={ setSort } sortMenu={ sortMenu } />
                     </div>
-                    <div className="col-md-9">
+                    <div className="col-md-9 d-flex">
                         <MenuList mode={ mode } menu={ menu } />
                     </div>
                 </div>

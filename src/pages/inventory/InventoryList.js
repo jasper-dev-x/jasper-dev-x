@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { apiUpdateItem, apiDeleteItem, updateItem, deleteItem, initInventory } from '../../reduxPie/inventorySlice';
+import { apiUpdateItem, apiDeleteItem, updateItem, deleteItem, initInventory, apiGetAllItems } from '../../reduxPie/inventorySlice';
 import FormName from './components/FormName';
 import FormPrice from './components/FormPrice';
 
@@ -19,7 +19,7 @@ export default function InventoryList() {
 
     useEffect(() => {
         dispatch(initInventory());
-        // dispatch(apiGetAllItems());
+        dispatch(apiGetAllItems());
     }, [dispatch]);
 
     // FORM QUANTITY VALIDATION

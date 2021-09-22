@@ -4,7 +4,7 @@ import { addToCart } from '../../../reduxPie/cartSlice';
 
 export default function MenuList({ menu }) {
     const mode = useSelector(state => state.mode);
-    const height = `84vh`;
+    const height = window.innerHeight < window.innerWidth * 1.35 ? `84vh` : `59vh`;
     const dispatch = useDispatch();
     const XY = 30;
     const fill = () => {
@@ -19,7 +19,7 @@ export default function MenuList({ menu }) {
         try {
             bag.classList.add('d-none');
             check.classList.remove('d-none');
-            dispatch(addToCart({ _id })); 
+            dispatch(addToCart({ _id }));
         } catch (err) {
             console.error("ERROR ON ADD TO CART: " + err);
         } finally {
@@ -31,12 +31,12 @@ export default function MenuList({ menu }) {
     };
 
     return (
-        <div className="d-flex flex-fill centered ps-4" style={ { height: `88vh` } }>
-            <div id="menu" className="d-flex flex-fill row shadow bgRed pb-5 pt-3" style={ { height } }>
+        <div className="d-flex flex-fill align-items-end ps-4">
+            <div id="menu" className="d-flex row bgRed pb-5 pt-3" style={ { height } }>
                 { menu.map((item, key) => {
                     return (
                         <div key={ key } className={ `col-md-6 text-${mode.txt}` }>
-                            <div className={ `d-flex flex-fill card bg-${mode.bg} mb-3` }>
+                            <div className={ `d-flex flex-fill card bg-${mode.bg} shadow-sm mb-3` }>
                                 <div className="card-header display-6 user-select-none">{ item.name }</div>
                                 <div className="card-body d-flex flex-fill justify-content-between">
 

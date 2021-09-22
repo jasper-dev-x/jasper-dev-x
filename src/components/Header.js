@@ -7,6 +7,7 @@ import lightLogo from '../images/lightLogo.png';
 import TWINZ from '../images/TwinzLogo.png';
 import MIB from '../images/MIB.png';
 import COLORCAM from '../images/ColorCam.png';
+import SARITA from '../images/Sarita.png';
 
 export default function Header() {
     const dispatch = useDispatch();
@@ -88,18 +89,39 @@ export default function Header() {
                                     </Link>
                                 </div>
                                 <div className="d-flex flex-fill flex-column myLinkGroup p-2">
-                                    <h1 className="display-6 text-center mb-5">Other Projects</h1>
-                                    <div className="d-flex justify-content-around">
-                                        <a href="https://colorcam-jxrmd.mongodbstitch.com/" className="btn">
-                                            <img src={ COLORCAM } alt="..." width={ XY * 2 } height={ XY * 2 } />
+                                    <h1 className="display-6 text-center mb-3">Passion Projects</h1>
+                                    <div className="container">
+                                        <div className="row">
+                                            <div className="col d-flex flex-column centered text-center">
+                                                <a href="https://colorcam-jxrmd.mongodbstitch.com/" className="btn">
+                                                    <img src={ COLORCAM } alt="..." width={ XY * 2 } height={ XY * 2 } />
+                                                </a>
+                                                <span>Color Cam</span>
+                                            </div>
+                                            {/* <div className="col d-flex flex-column centered text-center">
+                                                <a href="https://mib-productions-escdq.mongodbstitch.com/" className="btn btn-dark">
+                                                    <img src={ MIB } alt="..." width={ XY * 1.75 } height={ XY * 1.75 } />
+                                                </a>
+                                                <span>MIB Production</span>
+                                            </div> */}
+                                            <div className="col d-flex flex-column centered text-center">
+                                                <a href="https://twinzhotchicken-mmeew.mongodbstitch.com/" className="btn btn-light">
+                                                    <img src={ TWINZ } alt="..." width={ XY * 2 } height={ XY * 2 } />
+                                                </a>
+                                                <span>Twinz Chicken</span>
+                                            </div>
+                                            <div className="col d-flex flex-column centered text-center">
+                                                <a href="https://saritacatering-vglhw.mongodbstitch.com/" className="btn">
+                                                    <img src={ SARITA } alt="..." width={ XY * 2 } height={ XY * 2 } />
+                                                </a>
+                                                <span>Sarita Catering</span>
+                                            </div>
+                                        </div>
 
-                                        </a>
-                                        <a href="https://mib-productions-escdq.mongodbstitch.com/" className="btn btn-dark">
-                                            <img src={ MIB } alt="..." width={ XY * 1.75 } height={ XY * 1.75 } />
-                                        </a>
-                                        <a href="https://twinzhotchicken-mmeew.mongodbstitch.com/" className="btn btn-light">
-                                            <img src={ TWINZ } alt="..." width={ XY * 2 } height={ XY * 2 } />
-                                        </a>
+
+
+
+
                                     </div>
 
                                 </div>

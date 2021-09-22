@@ -104,7 +104,7 @@
 
 .cartBadge {
   position: relative;
-  bottom: 35%;
+  bottom: 20px;
   right: 12%;
 }
 
@@ -171,7 +171,6 @@
 #menu {
   overflow: auto;
   border-top-left-radius: 15px;
-  border-bottom-left-radius: 15px;
 }
 
 .myLinkGroup {

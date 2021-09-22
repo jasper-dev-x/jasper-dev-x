@@ -20,7 +20,7 @@ export default function Cart() {
         setCartItems([]);
     };
     return (
-        <div className={ `d-flex flex-fill centered py-5` }>
+        <div className={ `d-flex flex-fill centered` }>
             <div className="container">
                 <div className={ `d-flex card shadow border-${mode.txt} mb-3` } style={ { borderRadius } }>
                     <div className="d-flex myCard-header">
