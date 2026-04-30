@@ -6,7 +6,7 @@ I specialize in frontend-heavy systems using React and TypeScript, with experien
 
 ---
 
-## 🚀 Current Focus
+## Current Focus
 
 - Building **StudioAxis** — a SaaS platform improving studio operations and booking workflows
 - Exploring modern fullstack patterns with TanStack Start and server-driven architecture
@@ -14,7 +14,7 @@ I specialize in frontend-heavy systems using React and TypeScript, with experien
 
 ---
 
-## 🧠 Tech Stack
+## Tech Stack
 
 **Frontend**
 - React, Angular, Next.js, React Native
@@ -32,7 +32,7 @@ I specialize in frontend-heavy systems using React and TypeScript, with experien
 
 ---
 
-## 🔥 Featured Project
+## Featured Project
 
 ### StudioAxis (private, request demo)
 A fullstack SaaS platform designed to streamline studio management and improve booking experiences.
@@ -52,7 +52,7 @@ A fullstack SaaS platform designed to streamline studio management and improve b
 
 ---
 
-## 💡 What I Care About
+## What I Care About
 
 - Clean, maintainable architecture  
 - Fast and responsive user experiences  
@@ -61,7 +61,7 @@ A fullstack SaaS platform designed to streamline studio management and improve b
 
 ---
 
-## 📫 Connect
+## Connect
 
 - Email: joshua-marrero@outlook.com
-- LinkedIn: [add link]
+- LinkedIn: https://www.linkedin.com/in/joshua-marrero-01483b192
