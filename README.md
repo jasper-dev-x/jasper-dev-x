@@ -2,7 +2,7 @@
 
 Fullstack Software Engineer focused on building fast, scalable, and intuitive web applications.
 
-I specialize in frontend-heavy systems using React and TypeScript, with experience designing fullstack architectures and solving real-world UX problems.
+I specialize in frontend-heavy systems using React or Angular, with experience designing fullstack architectures and solving real-world UX problems.
 
 ---
 
